@@ -3,7 +3,8 @@ import 'package:pomogrow/core/theme/app_pallete.dart';
 
 class AuthButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const AuthButton({super.key, required this.onPressed});
+  final String text;
+  const AuthButton({super.key, required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,13 @@ class AuthButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           fixedSize: const Size(395, 55),
           backgroundColor: AppPallete.transparentColor,
           shadowColor: Colors.transparent,
         ),
-        child: Text('Sign Up', style: Theme.of(context).textTheme.bodyLarge),
+        child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
       ),
     );
   }

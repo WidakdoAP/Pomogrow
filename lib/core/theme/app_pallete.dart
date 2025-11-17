@@ -8,5 +8,6 @@ class AppPallete {
   static const Color gradient1 = Color(0xFFB6DB9F);
   static const Color gradient2 = Color(0xFFD8FFB1);
   static const Color gradient3 = Color(0xFFE7FFCE);
+  static const Color error = Color(0xFF800101);
   static const Color transparentColor = Colors.transparent;
 }

@@ -20,6 +20,7 @@ class AppTheme {
   );
 
   static final _border = OutlineInputBorder(
+    borderSide: BorderSide(color: AppPallete.textfieldColor),
     borderRadius: BorderRadius.circular(10),
   );
 
@@ -29,11 +30,10 @@ class AppTheme {
       contentPadding: const EdgeInsets.all(12),
       filled: true,
       fillColor: AppPallete.textfieldColor,
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppPallete.textfieldColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
+      enabledBorder: _border,
       focusedBorder: _border,
+      errorBorder: _border,
+      focusedErrorBorder: _border,
     ),
   );
 }

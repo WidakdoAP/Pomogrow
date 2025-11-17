@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-
+import 'package:lottie/lottie.dart';
 import '../../domain/entities/onboarding_entity.dart';
 import '../../data/onboarding_local_data.dart';
 
@@ -9,7 +9,7 @@ final onboardingRepositoryProvider = Provider((ref) => OnboardingLocalData());
 final onboardingPagesProvider = Provider<List<OnboardingEntity>>(
   (ref) => [
     OnboardingEntity(
-      image: 'assets/images/onboarding_tree.png',
+      image: Lottie.asset('assets'),
       title: 'WAKTU FOKUS',
       desc:
           'Fokus bersama bibit kecilmu hingga tumbuh menjadi pohon yang indah dalam waktu yang kamu tentukan! ',

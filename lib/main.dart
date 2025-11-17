@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomogrow/core/.secrets/supabase_key.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +18,10 @@ const supabaseKey = String.fromEnvironment('SUPABASE_KEY');
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
+  await Supabase.initialize(
+    url: SupabaseKey.SUPABASE_URL,
+    anonKey: SupabaseKey.SUPABASE_KEY,
+  );
 
   runApp(ProviderScope(child: MyApp()));
 }
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightThemeMode.copyWith(
         textTheme: AppTheme.fontTheme.textTheme,
       ),
-      home: SplashScreen(),
+      home: SigninScreen(),
     );
   }
 }
