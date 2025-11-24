@@ -7,6 +7,7 @@ class AuthField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final Function(String)? onChanged;
 
   const AuthField({
     super.key,
@@ -15,6 +16,7 @@ class AuthField extends StatefulWidget {
     required this.controller,
     required this.hintText,
     this.isPassword = false,
+    this.onChanged,
   });
 
   @override
@@ -30,6 +32,7 @@ class _AuthFieldState extends State<AuthField> {
       controller: widget.controller,
       validator: widget.validator,
       obscureText: widget.isPassword ? _obscureText : false,
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         prefixIcon: widget.icon,
         hintText: widget.hintText,

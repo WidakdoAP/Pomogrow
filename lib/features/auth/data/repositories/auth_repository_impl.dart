@@ -48,6 +48,28 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failures, Unit>> resetPassword({required String email}) async {
+    try {
+      await remoteDatasource.resetPassword(email: email);
+      return const Right(unit);
+    } on ServerException catch (e) {
+      return left(Failures(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failures, UserEntity?>> updatePassword({
+    required String password,
+  }) async {
+    try {
+      final user = await remoteDatasource.updatePassword(password: password);
+      return Right(user);
+    } on ServerException catch (e) {
+      return left(Failures(e.message));
+    }
+  }
+
+  @override
   Future<void> signInWithGoogle() {
     return remoteDatasource.signInWithGoogle();
   }

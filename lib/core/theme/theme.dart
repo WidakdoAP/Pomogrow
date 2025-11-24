@@ -16,6 +16,11 @@ class AppTheme {
         fontWeight: FontWeight.w800,
         color: AppPallete.textTitleColor,
       ),
+      titleMedium: TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w700,
+        color: AppPallete.titleMediumColor,
+      ),
     ),
   );
 

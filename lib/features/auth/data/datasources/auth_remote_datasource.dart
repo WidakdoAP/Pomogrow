@@ -10,6 +10,8 @@ abstract interface class AuthRemoteDatasource {
     required String password,
   });
   Future<UserEntity?> signIn({required String email, required String password});
+  Future<void> resetPassword({required String email});
+  Future<UserEntity?> updatePassword({required String password});
   Future<void> signInWithGoogle();
   Stream<AuthState> getAuthStateChange();
 }
@@ -37,7 +39,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
       }
       return UserEntity(id: user.id, name: name, email: email);
     } catch (e) {
-      throw ServerException(e.toString());
+      throw ServerException("Terjadi Kesalahan: $e");
     }
   }
 
@@ -67,6 +69,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
       throw ServerException(e.message);
     } catch (e) {
       throw ServerException("Terjadi kesalahan: $e");
+    }
+  }
+
+  @override
+  Future<void> resetPassword({required String email}) async {
+    await client.auth.resetPasswordForEmail(
+      email,
+      redirectTo: "pomogrow://login-callback/",
+    );
+  }
+
+  @override
+  Future<UserEntity?> updatePassword({required String password}) async {
+    try {
+      final response = await client.auth.updateUser(
+        UserAttributes(password: password),
+      );
+      final user = response.user!;
+      final userMetadata = user.userMetadata;
+
+      return UserEntity(
+        id: user.id,
+        name: userMetadata?['name'] ?? 'User',
+        email: user.email ?? '',
+      );
+    } catch (e) {
+      throw ServerException("Terjadi kesalahan $e");
     }
   }
 

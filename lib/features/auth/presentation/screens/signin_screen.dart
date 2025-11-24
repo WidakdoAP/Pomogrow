@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,12 +27,17 @@ class SigninScreen extends ConsumerStatefulWidget {
 }
 
 class _SignInScreenState extends ConsumerState<SigninScreen> {
+  ProviderSubscription<AsyncValue<UserEntity?>>? _authListener;
+  Timer? _timer;
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool isShowLoading = false;
   bool isShowConfetti = false;
+  bool hasNavigated = false;
+  bool isListenerAdded = false;
 
   late SMITrigger check;
   late SMITrigger error;
@@ -49,11 +56,21 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
 
   void signIn(BuildContext context) {
     final form = _formKey.currentState!;
+    if (isShowLoading) return;
     setState(() {
       isShowLoading = true;
-      isShowConfetti = true;
+      isShowConfetti = false;
     });
-    Future.delayed(Duration(seconds: 2), () async {
+    _timer = Timer(Duration(seconds: 2), () async {
+      if (!form.validate()) {
+        error.fire();
+        Future.delayed(Duration(seconds: 2), () {
+          if (!mounted) return;
+          setState(() {
+            isShowLoading = false;
+          });
+        });
+      }
       if (form.validate()) {
         await ref
             .read(authNotifierProvider.notifier)
@@ -62,17 +79,24 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
               password: _passwordController.text.trim(),
             );
         check.fire();
-        Future.delayed(Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
+        setState(() {
+          isShowConfetti = true;
         });
         confetti.fire();
-      } else {
-        error.fire();
-        Future.delayed(Duration(seconds: 2), () {
+        _timer = Timer(Duration(seconds: 2), () {
+          if (!mounted) return;
           setState(() {
             isShowLoading = false;
+            isShowConfetti = false;
+          });
+        });
+      } else {
+        error.fire();
+        _timer = Timer(Duration(seconds: 2), () {
+          if (!mounted) return;
+          setState(() {
+            isShowLoading = false;
+            isShowConfetti = false;
           });
         });
       }
@@ -80,21 +104,86 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _authListener = ref.listenManual<AsyncValue<UserEntity?>>(
+      authNotifierProvider,
+      (previous, next) {
+        next.whenOrNull(
+          data: (user) {
+            if (user != null && !hasNavigated) {
+              hasNavigated = true;
+              if (mounted) {
+                setState(() {
+                  isShowLoading = false;
+                  isShowConfetti = false;
+                });
+              }
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  Navigator.pushReplacementNamed(context, '/home');
+                }
+              });
+            }
+          },
+          error: (err, _) {
+            if (mounted) {
+              setState(() {
+                isShowLoading = false;
+                isShowConfetti = false;
+              });
+              FlushbarNotif.show(context, title: "Error", msg: err.toString());
+            }
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _authListener?.close();
+    _timer?.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<UserEntity?>>(authNotifierProvider, (previous, next) {
-      next.whenOrNull(
-        data: (user) {
-          if (user != null && mounted) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) Navigator.pushReplacementNamed(context, '/home');
-            });
-          }
-        },
-        error: (err, _) {
-          FlushbarNotif.show(context, title: "Error", msg: err.toString());
-        },
-      );
-    });
+    // if (!isListenerAdded) {
+    //   isListenerAdded = true;
+
+    //   ref.listen<AsyncValue<UserEntity?>>(authNotifierProvider, (
+    //     previous,
+    //     next,
+    //   ) {
+    //     next.whenOrNull(
+    //       data: (user) {
+    //         if (user != null && !hasNavigated) {
+    //           hasNavigated = true;
+    //           setState(() {
+    //             isShowLoading = false;
+    //             isShowConfetti = false;
+    //           });
+    //           WidgetsBinding.instance.addPostFrameCallback((_) {
+    //             if (mounted) {
+    //               Navigator.pushReplacementNamed(context, '/home');
+    //             }
+    //           });
+    //         }
+    //       },
+    //       error: (err, _) {
+    //         FlushbarNotif.show(context, title: "Error", msg: err.toString());
+    //         setState(() {
+    //           isShowLoading = false;
+    //           isShowConfetti = false;
+    //         });
+    //       },
+    //     );
+    //   });
+    // }
     return Scaffold(
       body: Stack(
         children: [
@@ -109,7 +198,6 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
               ),
             ),
           ),
-
           SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -156,6 +244,9 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
                         if (value!.isEmpty) {
                           return "Password tidak boleh kosong!";
                         }
+                        if (value.length < 6) {
+                          return "Minimal 6 karakter";
+                        }
                         return null;
                       },
                     ),
@@ -174,7 +265,7 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
                                 ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pushNamed(context, '/');
+                                Navigator.pushNamed(context, '/email_verf');
                               },
                           ),
                         ),
@@ -213,7 +304,7 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
               ),
             ),
           ),
-          const Positioned(top: 40, left: 10, child: BackButtonWidgets()),
+          const Positioned(top: 50, left: 10, child: BackButtonWidgets()),
 
           isShowLoading
               ? CustomPositioned(

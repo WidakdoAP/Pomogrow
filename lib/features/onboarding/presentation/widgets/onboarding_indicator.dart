@@ -19,12 +19,12 @@ class OnboardingIndicator extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: currentIndex == index ? 20 : 10,
+          width: currentIndex == index ? 50 : 30,
           height: 10,
           decoration: BoxDecoration(
             color: currentIndex == index
-                ? AppPallete.gradient2
-                : AppPallete.gradient3,
+                ? AppPallete.indicatior
+                : AppPallete.offIndicator,
             borderRadius: BorderRadius.circular(8),
           ),
         );

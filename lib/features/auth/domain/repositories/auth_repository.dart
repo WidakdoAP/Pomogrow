@@ -16,5 +16,10 @@ abstract interface class AuthRepository {
   });
   Future<void> signInWithGoogle();
 
+  Future<Either<Failures, Unit>> resetPassword({required String email});
+  Future<Either<Failures, UserEntity?>> updatePassword({
+    required String password,
+  });
+
   Stream<AuthState> getAuthStateChange();
 }

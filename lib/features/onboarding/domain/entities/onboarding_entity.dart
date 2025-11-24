@@ -1,10 +1,10 @@
 class OnboardingEntity {
-  final String image;
+  final String path;
   final String title;
   final String desc;
 
   OnboardingEntity({
-    required this.image,
+    required this.path,
     required this.title,
     required this.desc,
   });

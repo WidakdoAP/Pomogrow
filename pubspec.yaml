@@ -46,18 +46,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/icons/pomogrow.svg
-    - assets/icons/google.svg
-    - assets/icons/title.svg
-    - assets/icons/app-logo.png
-    - assets/icons/app-logo-nobg.png
-    - assets/images/background_signin.jpg
-    - assets/images/onboarding_tree.png
-    - assets/images/onboarding_dead.png
-    - assets/images/onboarding_fields.png
-    - assets/images/onboarding_timer.png
-    - assets/animations/check_error.riv
-    - assets/animations/confetti_explosion.riv
+    - assets/icons/
+    - assets/images/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

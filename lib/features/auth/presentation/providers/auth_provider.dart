@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomogrow/features/auth/domain/usecases/reset_password.dart';
+import 'package:pomogrow/features/auth/domain/usecases/update_password.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
@@ -38,6 +40,14 @@ final signUpWithGoogleUsecaseProvider = Provider<SignUpWithGoogle>((ref) {
   final repo = ref.watch(authRepositoryProvider);
   return SignUpWithGoogle(repo);
 });
+final resetPasswordUsecaseProvider = Provider<ResetPasswordUsecase>((ref) {
+  final repo = ref.watch(authRepositoryProvider);
+  return ResetPasswordUsecase(repo);
+});
+final updatePasswordUsecaseProvider = Provider<UpdatePasswordUsecase>((ref) {
+  final repo = ref.watch(authRepositoryProvider);
+  return UpdatePasswordUsecase(repo);
+});
 
 // Stream State
 final authStateStreamProvider = StreamProvider<AuthState>((ref) {
@@ -46,11 +56,20 @@ final authStateStreamProvider = StreamProvider<AuthState>((ref) {
 
 // Auth State Notifier
 class AuthNotifier extends StateNotifier<AsyncValue<UserEntity?>> {
+  final Ref ref;
   final SignUpUsecase _signUpUsecase;
   final SignInUsecase _signInUsecase;
   final SignUpWithGoogle _signUpWithGoogle;
-  AuthNotifier(this._signUpUsecase, this._signInUsecase, this._signUpWithGoogle)
-    : super(const AsyncData(null));
+  final ResetPasswordUsecase _resetPasswordUsecase;
+  final UpdatePasswordUsecase _updatePasswordUsecase;
+  AuthNotifier(
+    this.ref,
+    this._signUpUsecase,
+    this._signInUsecase,
+    this._signUpWithGoogle,
+    this._resetPasswordUsecase,
+    this._updatePasswordUsecase,
+  ) : super(const AsyncData(null));
 
   Future<void> signUp({
     required String name,
@@ -86,6 +105,36 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserEntity?>> {
     }
   }
 
+  Future<void> sendResetEmail({required String email}) async {
+    final action = ref.read(authActionStateProvider.notifier);
+    action.setLoading();
+    try {
+      final result = await _resetPasswordUsecase(ResetParams(email: email));
+      result.fold(
+        (l) => action.setError(l.message),
+        (r) => action.setSuccess("Email reset password berhasil dikirim."),
+      );
+    } catch (e) {
+      action.setError("Gagal mengirim email reset: $e");
+    }
+  }
+
+  Future<void> updateNewPassword({required String password}) async {
+    final action = ref.read(authActionStateProvider.notifier);
+    action.setLoading();
+    try {
+      final result = await _updatePasswordUsecase(
+        UpdateParams(password: password),
+      );
+      result.fold(
+        (l) => action.setError(l.message),
+        (r) => action.setSuccess("Password berhasil diperbarui."),
+      );
+    } catch (e) {
+      action.setError("Gagal mengubah password: $e");
+    }
+  }
+
   Future<void> signUpWithGoogle() async {
     state = const AsyncLoading();
     try {
@@ -100,11 +149,41 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserEntity?>> {
   }
 }
 
+class AuthActionNotifier extends StateNotifier<AsyncValue<String?>> {
+  AuthActionNotifier() : super(const AsyncData(null));
+
+  void setLoading() {
+    state = const AsyncLoading();
+  }
+
+  void setError(String message) {
+    state = AsyncError(message, StackTrace.current);
+  }
+
+  void setSuccess(String message) {
+    state = AsyncData(message);
+  }
+}
+
+final authActionStateProvider =
+    StateNotifierProvider<AuthActionNotifier, AsyncValue<String?>>(
+      (ref) => AuthActionNotifier(),
+    );
+
 final authNotifierProvider =
     StateNotifierProvider<AuthNotifier, AsyncValue<UserEntity?>>((ref) {
       final signUpUsecase = ref.watch(signUpUsecaseProvider);
       final signInUsecase = ref.watch(signInUsecaseProvider);
       final signUpWithGoogle = ref.watch(signUpWithGoogleUsecaseProvider);
+      final resetPassword = ref.watch(resetPasswordUsecaseProvider);
+      final updatePassword = ref.watch(updatePasswordUsecaseProvider);
 
-      return AuthNotifier(signUpUsecase, signInUsecase, signUpWithGoogle);
+      return AuthNotifier(
+        ref,
+        signUpUsecase,
+        signInUsecase,
+        signUpWithGoogle,
+        resetPassword,
+        updatePassword,
+      );
     });

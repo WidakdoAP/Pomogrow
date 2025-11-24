@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:lottie/lottie.dart';
 import '../../domain/entities/onboarding_entity.dart';
 import '../../data/onboarding_local_data.dart';
 
@@ -9,25 +8,25 @@ final onboardingRepositoryProvider = Provider((ref) => OnboardingLocalData());
 final onboardingPagesProvider = Provider<List<OnboardingEntity>>(
   (ref) => [
     OnboardingEntity(
-      image: Lottie.asset('assets'),
+      path: 'assets/animations/plant.json',
       title: 'WAKTU FOKUS',
       desc:
           'Fokus bersama bibit kecilmu hingga tumbuh menjadi pohon yang indah dalam waktu yang kamu tentukan! ',
     ),
     OnboardingEntity(
-      image: 'assets/images/onboarding_dead.png',
+      path: 'assets/animations/dead.json',
       title: 'POHON MATI',
       desc:
           'Jika kamu meninggalkan aplikasi sebelum waktu fokusmu selesai, pohon kecilmu akan layu dan mati.',
     ),
     OnboardingEntity(
-      image: 'assets/images/onboarding_fields.png',
+      path: 'assets/animations/fields.json',
       title: 'LADANG',
       desc:
           'Selesaikan fokusmu dan dapatkan pohon di ladang. Penuhi ladangnya untuk meraih poin spesial!',
     ),
     OnboardingEntity(
-      image: 'assets/images/onboarding_timer.png',
+      path: 'assets/animations/list.json',
       title: 'AI JADWAL',
       desc:
           'AI akan membantumu merancang jadwal dan menyimpan hasilnya ke fitur jadwal sebagai pengingat.',
