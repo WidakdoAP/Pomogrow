@@ -41,4 +41,13 @@ class AppTheme {
       focusedErrorBorder: _border,
     ),
   );
+
+  static final navigatorTheme = ThemeData(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+        TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+      },
+    ),
+  );
 }

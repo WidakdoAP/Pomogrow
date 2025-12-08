@@ -46,9 +46,7 @@ class OnboardingButton extends ConsumerWidget {
         ),
         child: Text(
           currentPages == totalPages - 1 ? 'MULAI' : 'LANJUT',
-          style: const TextStyle(
-            color: AppPallete.btnForeground,
-          ), //Theme.of(context).textTheme.bodyMedium,
+          style: const TextStyle(color: AppPallete.btnForeground),
         ),
       ),
     );

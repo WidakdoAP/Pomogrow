@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/features/home/domain/entities/bottom_item.dart';
+import 'package:pomogrow/features/home/presentation/providers/menu_provider.dart';
+import 'package:pomogrow/features/home/presentation/widgets/bottombar_icon.dart';
 
-class BottomBar extends StatelessWidget {
+class BottomBar extends ConsumerWidget {
   const BottomBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    const animDuration = Duration(milliseconds: 250);
+    final activeIndex = ref.watch(bottomBarIndexProvider);
+
+    final items = [
+      BottomItem(icon: Icons.timer, title: "Fokus", route: "/"),
+      BottomItem(icon: Icons.nature, title: "Ladang", route: "/fields"),
+      BottomItem(icon: Icons.chat_bubble, title: "Chatbot", route: "/"),
+      BottomItem(icon: Icons.person, title: "Profile", route: "/profile"),
+    ];
+
     return ClipPath(
       clipper: BottomBarClipper(),
       child: Container(
@@ -21,6 +35,52 @@ class BottomBar extends StatelessWidget {
             ),
           ],
         ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BottomBarItem(
+              isActive: activeIndex == 0,
+              icon: items[0].icon,
+              title: items[0].title,
+              animDuration: animDuration,
+              onTap: () {
+                ref.read(bottomBarIndexProvider.notifier).setIndex(0);
+                Navigator.pushNamed(context, items[0].route);
+              },
+            ),
+            BottomBarItem(
+              isActive: activeIndex == 1,
+              icon: items[1].icon,
+              title: items[1].title,
+              animDuration: animDuration,
+              onTap: () {
+                ref.read(bottomBarIndexProvider.notifier).setIndex(1);
+                Navigator.pushNamed(context, items[1].route);
+              },
+            ),
+            const SizedBox(width: 80), // untuk StartButton cutout
+            BottomBarItem(
+              isActive: activeIndex == 2,
+              icon: items[2].icon,
+              title: items[2].title,
+              animDuration: animDuration,
+              onTap: () {
+                ref.read(bottomBarIndexProvider.notifier).setIndex(2);
+                Navigator.pushNamed(context, items[2].route);
+              },
+            ),
+            BottomBarItem(
+              isActive: activeIndex == 3,
+              icon: items[3].icon,
+              title: items[3].title,
+              animDuration: animDuration,
+              onTap: () {
+                ref.read(bottomBarIndexProvider.notifier).setIndex(3);
+                Navigator.pushNamed(context, items[3].route);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -32,7 +92,7 @@ class BottomBarClipper extends CustomClipper<Path> {
     final path = Path();
 
     double centerWidth = size.width / 2;
-    double fabRadius = 50;
+    double fabRadius = 45;
 
     double topLeftRadius = 24;
     double topRightRadius = 24;

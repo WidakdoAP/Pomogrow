@@ -5,7 +5,10 @@ import 'package:pomogrow/core/.secrets/supabase_key.dart';
 import 'package:pomogrow/features/auth/presentation/screens/authgate.dart';
 import 'package:pomogrow/features/auth/presentation/screens/email_auth_screen.dart';
 import 'package:pomogrow/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:pomogrow/features/field/presentation/screens/fields_screen.dart';
 import 'package:pomogrow/features/home/presentation/screens/entry_screen.dart';
+import 'package:pomogrow/features/profile/presentation/screens/profile_screen.dart';
+import 'package:pomogrow/features/timer/presentation/screens/timer_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,16 +69,19 @@ class _MyAppState extends State<MyApp> {
         '/onboarding': (context) => const OnboardingScreen(),
         '/signin': (context) => const SigninScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) => const EntryScreen(),
         '/email_verf': (context) => const UserEmailScreen(),
         '/pass_reset': (context) => const ResetPasswordScreen(),
         '/auth_gate': (context) => const AuthGate(),
+        '/profile': (context) => const ProfileScreen(),
+        '/fields': (context) => const FieldsScreen(),
       },
       title: 'Pomogrow',
       theme: AppTheme.lightThemeMode.copyWith(
         textTheme: AppTheme.fontTheme.textTheme,
+        pageTransitionsTheme: AppTheme.navigatorTheme.pageTransitionsTheme,
       ),
-      home: EntryScreen(),
+      home: FieldsScreen(),
     );
   }
 }

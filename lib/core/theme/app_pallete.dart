@@ -21,4 +21,9 @@ class AppPallete {
   static const Color btnForeground = Color(0xFFFFFFFF);
   static const Color titleMediumColor = Color(0xFF4CA626);
   static const Color textBlack = Color(0xFF000000);
+  static const Color blurWhite = Color(0x50696969);
+  static const Color grey = Color(0xFF696969);
+  static const Color profileBackground = Color(0xFF90CF8E);
+  static const Color barColor = Color(0xFFA8D38D);
+  static const Color barColorTransparent = Color(0x80A8D38D);
 }

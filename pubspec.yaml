@@ -35,6 +35,10 @@ dependencies:
   rive: ^0.13.20
   # Lottie :>
   lottie: ^3.3.2
+  # Image Picker -__-
+  image_picker: ^1.2.1
+  # Chart Maker
+  fl_chart: ^1.1.1
 
 dev_dependencies:
   flutter_test:

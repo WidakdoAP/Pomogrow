@@ -39,7 +39,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
       child: SafeArea(
         child: Column(
           children: [
-            const InfoCard(name: "User"),
+            const InfoCard(),
             Padding(
               padding: const EdgeInsets.only(left: 24),
               child: Column(
@@ -121,35 +121,3 @@ class _SidebarState extends ConsumerState<Sidebar> {
     );
   }
 }
-
-// return Column(
-//   children: [
-//     Stack(
-//       children: [
-//         Positioned(height: 56, width: 288
-
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: AppPallete.gradient3,
-//                     borderRadius: BorderRadius.all(
-//                       Radius.circular(10),
-//                     ),
-//                   ),
-//                 ),
-//               )
-//             : SizedBox(),
-//       ],
-//     ),
-//     ListTile(
-//       leading: SizedBox(
-//         height: 34,
-//         width: 34,
-//         child: Icon(item.icon),
-//       ),
-//       title: Text(
-//         item.title,
-//         style: Theme.of(context).textTheme.bodyLarge,
-//       ),
-//     ),
-//   ],
-// );

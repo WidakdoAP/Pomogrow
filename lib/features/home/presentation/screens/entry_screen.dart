@@ -81,7 +81,6 @@ class _EntryScreenState extends State<EntryScreen>
                       child: HomeScreen(),
                     ),
 
-                    // Blur overlay
                     if (animation.value > 0)
                       ClipRRect(
                         borderRadius: BorderRadius.circular(24),
@@ -90,7 +89,7 @@ class _EntryScreenState extends State<EntryScreen>
                             sigmaX: 10 * animation.value,
                             sigmaY: 10 * animation.value,
                           ),
-                          child: Container(color: AppPallete.blackShadow),
+                          child: Container(color: AppPallete.blurWhite),
                         ),
                       ),
                   ],

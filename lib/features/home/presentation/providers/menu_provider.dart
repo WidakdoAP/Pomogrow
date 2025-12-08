@@ -32,6 +32,19 @@ class ActiveMenuIndexNotifier extends Notifier<int?> {
   }
 }
 
+class BottomBarIndexNotifier extends Notifier<int?> {
+  @override
+  int? build() => null;
+
+  void setIndex(int index) {
+    state = index;
+  }
+}
+
 final activeMenuIndexProvider = NotifierProvider<ActiveMenuIndexNotifier, int?>(
   () => ActiveMenuIndexNotifier(),
+);
+
+final bottomBarIndexProvider = NotifierProvider<BottomBarIndexNotifier, int?>(
+  () => BottomBarIndexNotifier(),
 );

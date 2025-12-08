@@ -36,6 +36,7 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
 
   bool isShowLoading = false;
   bool isShowConfetti = false;
+  bool isRiveReady = false;
   bool hasNavigated = false;
   bool isListenerAdded = false;
 
@@ -54,53 +55,51 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
     return controller;
   }
 
-  void signIn(BuildContext context) {
+  void signIn(BuildContext context) async {
     final form = _formKey.currentState!;
-    if (isShowLoading) return;
+    if (!isRiveReady) return;
     setState(() {
       isShowLoading = true;
       isShowConfetti = false;
     });
-    _timer = Timer(Duration(seconds: 2), () async {
-      if (!form.validate()) {
-        error.fire();
-        Future.delayed(Duration(seconds: 2), () {
-          if (!mounted) return;
-          setState(() {
-            isShowLoading = false;
-          });
-        });
-      }
-      if (form.validate()) {
-        await ref
-            .read(authNotifierProvider.notifier)
-            .signIn(
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-            );
-        check.fire();
+    if (!form.validate()) {
+      error.fire();
+      Future.delayed(Duration(seconds: 2), () {
+        if (!mounted) return;
         setState(() {
-          isShowConfetti = true;
+          isShowLoading = false;
         });
-        confetti.fire();
-        _timer = Timer(Duration(seconds: 2), () {
-          if (!mounted) return;
-          setState(() {
-            isShowLoading = false;
-            isShowConfetti = false;
-          });
+      });
+    }
+    if (form.validate()) {
+      await ref
+          .read(authNotifierProvider.notifier)
+          .signIn(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          );
+      check.fire();
+      setState(() {
+        isShowConfetti = true;
+      });
+      confetti.fire();
+      Future.delayed(Duration(seconds: 2), () {
+        if (!mounted) return;
+        setState(() {
+          isShowLoading = false;
+          isShowConfetti = false;
         });
-      } else {
-        error.fire();
-        _timer = Timer(Duration(seconds: 2), () {
-          if (!mounted) return;
-          setState(() {
-            isShowLoading = false;
-            isShowConfetti = false;
-          });
+      });
+    } else {
+      error.fire();
+      Future.delayed(Duration(seconds: 2), () {
+        if (!mounted) return;
+        setState(() {
+          isShowLoading = false;
+          isShowConfetti = false;
         });
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -184,6 +183,26 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
     //     );
     //   });
     // }
+    // ref.listen<AsyncValue<UserEntity?>>(authNotifierProvider, (previous, next) {
+    //   next.whenOrNull(
+    //     data: (user) {
+    //       if (user != null && context.mounted) {
+    //         setState(() {
+    //           isShowLoading = false;
+    //           isShowConfetti = false;
+    //         });
+    //         Navigator.pushReplacementNamed(context, '/home');
+    //       }
+    //     },
+    //     error: (err, _) {
+    //       FlushbarNotif.show(context, title: "Error", msg: err.toString());
+    //       setState(() {
+    //         isShowLoading = false;
+    //         isShowConfetti = false;
+    //       });
+    //     },
+    //   );
+    // });
     return Scaffold(
       body: Stack(
         children: [
@@ -306,18 +325,26 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
           ),
           const Positioned(top: 50, left: 10, child: BackButtonWidgets()),
 
-          isShowLoading
+          Positioned(
+            child: Offstage(
+              offstage: true,
+              child: RiveAnimation.asset(
+                'assets/animations/check_error.riv',
+                onInit: (artboard) {
+                  final controller = getRiveController(artboard);
+                  check = controller.findSMI('Check') as SMITrigger;
+                  error = controller.findSMI('Error') as SMITrigger;
+                  reset = controller.findSMI('Reset') as SMITrigger;
+                  setState(() => isRiveReady = true);
+                },
+              ),
+            ),
+          ),
+
+          isShowLoading && isRiveReady
               ? CustomPositioned(
                   child: RiveAnimation.asset(
                     'assets/animations/check_error.riv',
-                    onInit: (artboard) {
-                      StateMachineController controller = getRiveController(
-                        artboard,
-                      );
-                      check = controller.findSMI("Check") as SMITrigger;
-                      error = controller.findSMI("Error") as SMITrigger;
-                      reset = controller.findSMI("Reset") as SMITrigger;
-                    },
                   ),
                 )
               : SizedBox(),
