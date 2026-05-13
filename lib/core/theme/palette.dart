@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppPallete {
+// Static color based on M3 Color.
+class AppPalette {
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color blackShadow = Color(0x80000000);
   static const Color textTitleColor = Color(0xFF0A5C36);
@@ -15,7 +16,7 @@ class AppPallete {
   static const Color halfGradient1 = Color(0xCCB6DB9F);
   static const Color halfGradient2 = Color(0xCCD8FFB1);
   static const Color halfGradient3 = Color(0xCCE7FFCE);
-  static const Color indicatior = Color(0xFF04471C);
+  static const Color indicator = Color(0xFF04471C);
   static const Color offIndicator = Color(0xFFABABAB);
   static const Color btnBackground = Color(0xFF04471C);
   static const Color btnForeground = Color(0xFFFFFFFF);
@@ -26,4 +27,5 @@ class AppPallete {
   static const Color profileBackground = Color(0xFF90CF8E);
   static const Color barColor = Color(0xFFA8D38D);
   static const Color barColorTransparent = Color(0x80A8D38D);
+  static const Color bannerTitle = Color(0xFF0D2818);
 }

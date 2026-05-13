@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/back_arrow.dart';
 import 'package:pomogrow/core/widgets/flushbar_notif.dart';
 import 'package:pomogrow/features/auth/presentation/providers/auth_provider.dart';
@@ -48,7 +48,7 @@ class _ResetPasswordScreen extends ConsumerState<ResetPasswordScreen> {
           RepaintBoundary(
             child: ClipPath(
               clipper: MiddleCurveClipper(),
-              child: Container(height: 1040, color: AppPallete.curveColor),
+              child: Container(height: 1040, color: AppPalette.curveColor),
             ),
           ),
 

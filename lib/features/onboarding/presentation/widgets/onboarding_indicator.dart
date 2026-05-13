@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class OnboardingIndicator extends StatelessWidget {
   final int currentIndex;
@@ -23,8 +23,8 @@ class OnboardingIndicator extends StatelessWidget {
           height: 10,
           decoration: BoxDecoration(
             color: currentIndex == index
-                ? AppPallete.indicatior
-                : AppPallete.offIndicator,
+                ? AppPalette.indicator
+                : AppPalette.offIndicator,
             borderRadius: BorderRadius.circular(8),
           ),
         );

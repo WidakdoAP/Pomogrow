@@ -1,75 +1,82 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:pomogrow/features/timer/data/datasources/points_datasource.dart';
 import 'package:pomogrow/features/timer/data/datasources/timer_datasource.dart';
+import 'package:pomogrow/features/timer/data/repositories/points_repository_impl.dart';
 import 'package:pomogrow/features/timer/data/repositories/timer_repository_impl.dart';
 import 'package:pomogrow/features/timer/domain/entities/timer.dart';
+import 'package:pomogrow/features/timer/domain/repositories/points_repository.dart';
 import 'package:pomogrow/features/timer/domain/repositories/timer_repository.dart';
 
 class TimerNotifier extends StateNotifier<FocusTimer> {
   final TimerRepository repo;
-  Timer? _ticker; // untuk Timer.periodic
+  final void Function(int duration)? onCompleted;
+  Timer? _ticker; // This is for Timer.periodic
+  int? _selectedTimer;
 
-  TimerNotifier(this.repo) : super(const FocusTimer()) {
+  // Constructor
+  TimerNotifier(this.repo, {this.onCompleted}) : super(const FocusTimer()) {
     _restoreTimer();
   }
 
-  // =============================
-  // RESTORE TIMER (saat app dibuka)
-  // =============================
-
+  // Restore timer (when app is opened)
   Future<void> _restoreTimer() async {
-    final (startTime, duration) = await repo.loadTimer();
+    final (startTime, duration, selectedMinutes) = await repo.loadTimer();
 
     if (startTime == null) return;
 
     final diff = DateTime.now().difference(startTime).inSeconds;
     final remaining = duration - diff;
 
+    _selectedTimer = selectedMinutes;
+
     if (remaining <= 0) {
-      // Timer sudah habis ketika app dibuka
+      // Timer is finished when app open.
       state = const FocusTimer();
       await repo.clearTimer();
       return;
     }
 
-    // Set initial state dahulu (penting!)
+    // Set initial state first (important!)
     state = FocusTimer(
       startTime: startTime,
       duration: duration,
       isRunning: true,
+      selectedMinutes: selectedMinutes
     );
 
-    // Lanjutkan ticker
+    // Continue ticker
     _startTicker(startTime, duration);
   }
 
-  // =============================
-  // START TIMER
-  // =============================
-
+  // Start timer.
   void start(int duration) {
     final now = DateTime.now();
+    _selectedTimer = duration;
 
-    repo.saveTimer(now, duration);
+    final durationInSeconds = duration * 60;
 
-    state = FocusTimer(startTime: now, duration: duration, isRunning: true);
+    repo.saveTimer(now, durationInSeconds, duration);
+    state = FocusTimer(
+        startTime: now,
+        duration: durationInSeconds,
+        isRunning: true,
+        selectedMinutes: duration
+    );
 
-    _startTicker(now, duration);
+    _startTicker(now, durationInSeconds);
   }
 
-  // =============================
-  // INTERNAL TICKER
-  // =============================
-
+  // Internal ticker.
   void _startTicker(DateTime start, int duration) {
     _ticker?.cancel();
 
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
       final elapsed = DateTime.now().difference(start).inSeconds;
       final remaining = duration - elapsed;
-
       if (remaining <= 0) {
+        onCompleted?.call(_selectedTimer ?? 0);
         stop();
         return;
       }
@@ -79,20 +86,14 @@ class TimerNotifier extends StateNotifier<FocusTimer> {
     });
   }
 
-  // =============================
-  // STOP TIMER
-  // =============================
-
+  // Stop timer.
   void stop() {
     _ticker?.cancel();
     repo.clearTimer();
     state = const FocusTimer();
   }
 
-  // =============================
-  // HELPER GETTERS
-  // =============================
-
+  // Getter Helper.
   int get remainingSeconds {
     if (!state.isRunning || state.startTime == null) return state.duration;
 
@@ -115,12 +116,24 @@ class TimerNotifier extends StateNotifier<FocusTimer> {
   }
 }
 
+// Provider
+
+// This is the timer provider.
 final timerRepositoryProvider = Provider<TimerRepository>((ref) {
   return TimerRepositoryImpl(TimerDatasource());
+});
+
+// And this is for points.
+final pointsRepositoryProvider = Provider<PointsRepository>((ref) {
+  return PointsRepositoryImpl(PointsDatasource());
 });
 
 final timerNotifierProvider = StateNotifierProvider<TimerNotifier, FocusTimer>((
   ref,
 ) {
-  return TimerNotifier(ref.read(timerRepositoryProvider));
+  return TimerNotifier(ref.read(timerRepositoryProvider),
+  onCompleted: (duration) async {
+    await ref.read(pointsRepositoryProvider).addPoints(duration);
+    },
+  );
 });

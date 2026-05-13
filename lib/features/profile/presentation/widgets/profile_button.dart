@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class ProfileButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -20,14 +20,14 @@ class ProfileButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           fixedSize: const Size(395, 55),
-          backgroundColor: AppPallete.gradient3,
+          backgroundColor: AppPalette.gradient3,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (icon != null) ...[
-              Icon(icon, color: AppPallete.textTitleColor, size: 22),
+              Icon(icon, color: AppPalette.textTitleColor, size: 22),
               const SizedBox(width: 10),
             ],
 

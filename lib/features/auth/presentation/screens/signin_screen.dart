@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomogrow/core/widgets/flushbar_notif.dart';
 import 'package:rive/rive.dart' hide Image;
 
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/back_arrow.dart';
 
 import 'package:pomogrow/features/auth/domain/entities/user.dart';
@@ -151,58 +151,6 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // if (!isListenerAdded) {
-    //   isListenerAdded = true;
-
-    //   ref.listen<AsyncValue<UserEntity?>>(authNotifierProvider, (
-    //     previous,
-    //     next,
-    //   ) {
-    //     next.whenOrNull(
-    //       data: (user) {
-    //         if (user != null && !hasNavigated) {
-    //           hasNavigated = true;
-    //           setState(() {
-    //             isShowLoading = false;
-    //             isShowConfetti = false;
-    //           });
-    //           WidgetsBinding.instance.addPostFrameCallback((_) {
-    //             if (mounted) {
-    //               Navigator.pushReplacementNamed(context, '/home');
-    //             }
-    //           });
-    //         }
-    //       },
-    //       error: (err, _) {
-    //         FlushbarNotif.show(context, title: "Error", msg: err.toString());
-    //         setState(() {
-    //           isShowLoading = false;
-    //           isShowConfetti = false;
-    //         });
-    //       },
-    //     );
-    //   });
-    // }
-    // ref.listen<AsyncValue<UserEntity?>>(authNotifierProvider, (previous, next) {
-    //   next.whenOrNull(
-    //     data: (user) {
-    //       if (user != null && context.mounted) {
-    //         setState(() {
-    //           isShowLoading = false;
-    //           isShowConfetti = false;
-    //         });
-    //         Navigator.pushReplacementNamed(context, '/home');
-    //       }
-    //     },
-    //     error: (err, _) {
-    //       FlushbarNotif.show(context, title: "Error", msg: err.toString());
-    //       setState(() {
-    //         isShowLoading = false;
-    //         isShowConfetti = false;
-    //       });
-    //     },
-    //   );
-    // });
     return Scaffold(
       body: Stack(
         children: [
@@ -279,7 +227,7 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
                             text: 'Lupa Password?',
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
-                                  color: AppPallete.textTitleColor,
+                                  color: AppPalette.textTitleColor,
                                   decoration: TextDecoration.underline,
                                 ),
                             recognizer: TapGestureRecognizer()
@@ -307,7 +255,7 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
                             text: 'Sign Up',
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
-                                  color: AppPallete.textTitleColor,
+                                  color: AppPalette.textTitleColor,
                                   decoration: TextDecoration.underline,
                                 ),
                             recognizer: TapGestureRecognizer()

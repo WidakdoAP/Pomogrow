@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class BottomBarItem extends StatelessWidget {
   final bool isActive;
@@ -40,8 +40,8 @@ class BottomBarItem extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: isActive
-                ? AppPallete.blackShadow
-                : AppPallete.transparentColor,
+                ? AppPalette.blackShadow
+                : AppPalette.transparentColor,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
           ),
@@ -51,8 +51,8 @@ class BottomBarItem extends StatelessWidget {
                 icon,
                 size: 28,
                 color: isActive
-                    ? AppPallete.backgroundColor
-                    : AppPallete.textTitleColor,
+                    ? AppPalette.backgroundColor
+                    : AppPalette.textTitleColor,
               ),
               const SizedBox(height: 2),
               Text(
@@ -60,8 +60,8 @@ class BottomBarItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   color: isActive
-                      ? AppPallete.backgroundColor
-                      : AppPallete.textTitleColor,
+                      ? AppPalette.backgroundColor
+                      : AppPalette.textTitleColor,
                   fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                 ),
               ),

@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/features/home/presentation/screens/home_screen.dart';
 import 'package:pomogrow/features/home/presentation/widgets/home_sidebar.dart';
 import 'package:pomogrow/features/home/presentation/widgets/sidebar_button.dart';
@@ -89,7 +89,7 @@ class _EntryScreenState extends State<EntryScreen>
                             sigmaX: 10 * animation.value,
                             sigmaY: 10 * animation.value,
                           ),
-                          child: Container(color: AppPallete.blurWhite),
+                          child: Container(color: AppPalette.blurWhite),
                         ),
                       ),
                   ],

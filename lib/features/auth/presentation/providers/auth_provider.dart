@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomogrow/features/auth/domain/entities/local_auth_state.dart';
 import 'package:pomogrow/features/auth/domain/usecases/reset_password.dart';
 import 'package:pomogrow/features/auth/domain/usecases/update_password.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -50,7 +51,7 @@ final updatePasswordUsecaseProvider = Provider<UpdatePasswordUsecase>((ref) {
 });
 
 // Stream State
-final authStateStreamProvider = StreamProvider<AuthState>((ref) {
+final authStateStreamProvider = StreamProvider<LocalAuthState>((ref) {
   return ref.read(authRepositoryProvider).getAuthStateChange();
 });
 
@@ -69,7 +70,9 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserEntity?>> {
     this._signUpWithGoogle,
     this._resetPasswordUsecase,
     this._updatePasswordUsecase,
-  ) : super(const AsyncData(null));
+  ) : super(const AsyncLoading()) {
+    _listenToAuthChanges();
+  }
 
   Future<void> signUp({
     required String name,
@@ -146,6 +149,31 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserEntity?>> {
     } catch (e) {
       throw ServerException(e.toString());
     }
+  }
+
+  void _listenToAuthChanges() {
+    ref.listen<AsyncValue<LocalAuthState>>(
+        authStateStreamProvider,
+            (previous, next) {
+          next.when(
+              data: (authState) {
+                final user = authState.user;
+
+                if (user != null) {
+                  state = AsyncData(user);
+                } else {
+                  state = const AsyncData(null);
+                }
+              },
+              loading: () {
+            state = const AsyncLoading();
+          },
+              error: (e, _) {
+              state = AsyncError(e, StackTrace.current);
+              },
+          );
+        }
+    );
   }
 }
 

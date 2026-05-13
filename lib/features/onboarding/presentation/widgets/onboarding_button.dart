@@ -1,4 +1,4 @@
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 import '../providers/onboarding_provider.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +36,8 @@ class OnboardingButton extends ConsumerWidget {
           }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppPallete.btnBackground,
-          textStyle: const TextStyle(color: AppPallete.btnForeground),
+          backgroundColor: AppPalette.btnBackground,
+          textStyle: const TextStyle(color: AppPalette.btnForeground),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           minimumSize: const Size(80, 40),
           shape: RoundedRectangleBorder(
@@ -46,7 +46,7 @@ class OnboardingButton extends ConsumerWidget {
         ),
         child: Text(
           currentPages == totalPages - 1 ? 'MULAI' : 'LANJUT',
-          style: const TextStyle(color: AppPallete.btnForeground),
+          style: const TextStyle(color: AppPalette.btnForeground),
         ),
       ),
     );

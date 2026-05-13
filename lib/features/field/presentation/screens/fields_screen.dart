@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/global_bottombar.dart';
 import 'package:pomogrow/features/field/presentation/providers/field_provider.dart';
 import 'package:pomogrow/features/field/presentation/widgets/chart_fields.dart';
@@ -17,7 +17,7 @@ class _FieldScreenState extends State<FieldsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppPallete.gradient3,
+      backgroundColor: AppPalette.gradient3,
       bottomNavigationBar: GlobalBottomBar(),
       body: SingleChildScrollView(
         child: Stack(

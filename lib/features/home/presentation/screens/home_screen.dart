@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
 import 'package:pomogrow/features/home/presentation/widgets/home_background.dart';
 import 'package:pomogrow/features/home/presentation/widgets/home_bottombar.dart';
 import 'package:pomogrow/features/home/presentation/widgets/menu_square.dart';
@@ -45,37 +44,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: Stack(
         children: [
           const HomeBackground(),
-          Column(
-            children: [
-              const SizedBox(height: 450),
-              TimerCard(
-                minutes: minutes,
-                index: sliderIndex,
-                onChanged: (v) {
-                  setState(() => sliderIndex = v);
-                },
-                thumbImage: thumbImage,
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    MenuSquare(
-                      title: 'Catatan',
-                      desc: 'Beri Nama Fokusmu',
-                      imagePath: "assets/images/list.png",
+          Positioned.fill(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 400), //450
+                  TimerCard(
+                    minutes: minutes,
+                    index: sliderIndex,
+                    onChanged: (v) {
+                      setState(() => sliderIndex = v);
+                    },
+                    thumbImage: thumbImage,
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        MenuSquare(
+                          title: 'Catatan',
+                          desc: 'Beri Nama Fokusmu',
+                          imagePath: "assets/images/list.png",
+                        ),
+                        MenuSquare(
+                          title: 'Pohon',
+                          desc: 'Ganti Pohon Fokusmu',
+                          imagePath: "assets/images/forest.png",
+                        ),
+                      ],
                     ),
-                    MenuSquare(
-                      title: 'Pohon',
-                      desc: 'Ganti Pohon Fokusmu',
-                      imagePath: "assets/images/forest.png",
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 120), // avoid overlap with bottom button
+                ],
               ),
-            ],
+            ),
           ),
           Positioned(left: 0, right: 0, bottom: 0, child: BottomBar()),
           Align(
@@ -85,12 +89,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: StartButton(
                 onPressed: () {
                   final selectedTimer = minutes[sliderIndex.toInt()];
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          TimerScreen(timeIntMinutes: selectedTimer),
-                    ),
+                    '/timer',
+                    arguments: selectedTimer,
                   );
                 },
               ),
@@ -101,3 +103,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
+
+// Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (_) =>
+//         TimerScreen(timeIntMinutes: selectedTimer),
+//   ),
+// );

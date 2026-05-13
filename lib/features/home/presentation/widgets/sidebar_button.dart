@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class SidebarButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -15,11 +15,11 @@ class SidebarButton extends StatelessWidget {
           height: 40,
           width: 40,
           decoration: BoxDecoration(
-            color: AppPallete.backgroundColor,
+            color: AppPalette.backgroundColor,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppPallete.blackShadow,
+                color: AppPalette.blackShadow,
                 offset: Offset(0, 3),
                 blurRadius: 8,
               ),

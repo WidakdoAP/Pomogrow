@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/back_arrow.dart';
 
 import 'package:pomogrow/features/onboarding/presentation/widgets/onboarding_button.dart';
@@ -37,9 +37,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppPallete.halfGradient1,
-                  AppPallete.halfGradient2,
-                  AppPallete.halfGradient3,
+                  AppPalette.halfGradient1,
+                  AppPalette.halfGradient2,
+                  AppPalette.halfGradient3,
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

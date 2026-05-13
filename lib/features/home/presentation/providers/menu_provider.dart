@@ -3,12 +3,10 @@ import 'package:pomogrow/features/home/data/repositories/menu_repository.dart';
 import 'package:pomogrow/features/home/domain/entities/menu_item.dart';
 import 'package:pomogrow/features/home/domain/repositories/menu_repo.dart';
 
-// Repository Provider
 final menuRepositoryProvider = Provider<MenuRepo>((ref) {
   return MenuRepositoryImpl();
 });
 
-// Notifier modern
 class MenuNotifier extends Notifier<List<MenuItem>> {
   @override
   List<MenuItem> build() {

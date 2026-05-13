@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/features/home/presentation/widgets/image_slider.dart';
 
 class TimerCard extends StatelessWidget {
@@ -23,11 +23,11 @@ class TimerCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppPallete.backgroundColor,
+          color: AppPalette.backgroundColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppPallete.blackShadow,
+              color: AppPalette.blackShadow,
               blurRadius: 10,
               spreadRadius: 1,
               offset: const Offset(0, 4),
@@ -41,17 +41,19 @@ class TimerCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
-                color: AppPallete.textBlack,
+                color: AppPalette.textBlack,
               ),
             ),
             SliderTheme(
               data: SliderTheme.of(context).copyWith(
-                thumbShape: CustomThumbImage(thumbImage!),
-                activeTrackColor: AppPallete.gradient1,
-                activeTickMarkColor: AppPallete.transparentColor,
-                inactiveTrackColor: AppPallete.textTitleColor,
-                inactiveTickMarkColor: AppPallete.transparentColor,
-                overlayColor: AppPallete.transparentColor,
+                thumbShape: thumbImage != null
+                    ? CustomThumbImage(thumbImage!)
+                    : const RoundSliderThumbShape(),
+                activeTrackColor: AppPalette.gradient1,
+                activeTickMarkColor: AppPalette.transparentColor,
+                inactiveTrackColor: AppPalette.textTitleColor,
+                inactiveTickMarkColor: AppPalette.transparentColor,
+                overlayColor: AppPalette.transparentColor,
                 trackHeight: 12,
               ),
               child: Slider(
@@ -82,20 +84,3 @@ class TimerCard extends StatelessWidget {
     );
   }
 }
-
-// class _TimerCardState extends State<TimerCard> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadThumbImage();
-//   }
-
-//   Future<void> _loadThumbImage() async {
-//     final data = await rootBundle.load('assets/images/thumb_image.png');
-//     final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-//     final frame = await codec.getNextFrame();
-//     setState(() {
-//       widget.thumbImage = frame.image;
-//     });
-//   }
-// }

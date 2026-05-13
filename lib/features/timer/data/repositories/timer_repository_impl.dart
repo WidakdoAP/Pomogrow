@@ -6,12 +6,12 @@ class TimerRepositoryImpl implements TimerRepository {
   TimerRepositoryImpl(this.datasource);
 
   @override
-  Future<void> saveTimer(DateTime startTime, int duration) {
-    return datasource.saveTimer(startTime, duration);
+  Future<void> saveTimer(DateTime startTime, int duration, int selectedMinutes) {
+    return datasource.saveTimer(startTime, duration, selectedMinutes);
   }
 
   @override
-  Future<(DateTime?, int)> loadTimer() {
+  Future<(DateTime?, int, int)> loadTimer() {
     return datasource.loadTimer();
   }
 

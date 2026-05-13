@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class MenuSquare extends StatelessWidget {
   final String title;
@@ -20,11 +20,11 @@ class MenuSquare extends StatelessWidget {
         width: 170,
         height: 130,
         decoration: BoxDecoration(
-          color: AppPallete.backgroundColor,
+          color: AppPalette.backgroundColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppPallete.blackShadow,
+              color: AppPalette.blackShadow,
               blurRadius: 10,
               spreadRadius: 1,
               offset: const Offset(0, 4),

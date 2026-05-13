@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomogrow/features/auth/presentation/widgets/auth_positioned.dart';
 import 'package:rive/rive.dart';
 
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/flushbar_notif.dart';
 import 'package:pomogrow/core/widgets/social_button.dart';
 import 'package:pomogrow/core/widgets/back_arrow.dart';
@@ -57,7 +57,8 @@ class _SignUpScreenState extends ConsumerState<SignupScreen> {
       if (form.validate()) {
         await ref
             .read(authNotifierProvider.notifier)
-            .signIn(
+            .signUp(
+              name: _nameController.text.trim(),
               email: _emailController.text.trim(),
               password: _passwordController.text.trim(),
             );
@@ -193,7 +194,7 @@ class _SignUpScreenState extends ConsumerState<SignupScreen> {
                             text: 'Sign In',
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
-                                  color: AppPallete.textTitleColor,
+                                  color: AppPalette.textTitleColor,
                                   decoration: TextDecoration.underline,
                                 ),
                             recognizer: TapGestureRecognizer()

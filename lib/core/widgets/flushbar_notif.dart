@@ -1,7 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class FlushbarNotif {
   static void show(
@@ -18,11 +18,11 @@ class FlushbarNotif {
       borderRadius: BorderRadius.circular(10),
       backgroundGradient: LinearGradient(
         colors: [
-          AppPallete.gradient3,
-          AppPallete.gradient2,
-          AppPallete.gradient1,
+          AppPalette.gradient3,
+          AppPalette.gradient2,
+          AppPalette.gradient1,
         ],
       ),
-    )..show(context);
+    ).show(context);
   }
 }

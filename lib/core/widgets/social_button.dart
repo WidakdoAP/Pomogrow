@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class SocialButton extends StatelessWidget {
   final String asset;
@@ -14,7 +14,7 @@ class SocialButton extends StatelessWidget {
     super.key,
     required this.asset,
     required this.onPressed,
-    this.backgroundColor = AppPallete.transparentColor,
+    this.backgroundColor = AppPalette.transparentColor,
     this.height = 48,
     this.logoSize = 50,
     this.padding = const EdgeInsets.symmetric(horizontal: 12),

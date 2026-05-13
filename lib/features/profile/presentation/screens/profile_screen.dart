@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/back_arrow.dart';
 import 'package:pomogrow/core/widgets/global_bottombar.dart';
+import 'package:pomogrow/features/market/presentation/providers/transaction_provider.dart';
 import 'package:pomogrow/features/profile/presentation/providers/profile_provider.dart';
 import 'package:pomogrow/features/profile/presentation/widgets/profile_button.dart';
 import 'package:pomogrow/features/profile/presentation/widgets/profile_clip.dart';
@@ -20,7 +21,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(userProfileProvider);
-    final profile = profileAsync.value!;
+    final user = ref.watch(userPointsProvider);
+    final profile = profileAsync.value;
+
+    if (profile == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -42,7 +48,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: ProfileClip(
-              color: AppPallete.profileBackground,
+              color: AppPalette.profileBackground,
               height: 700,
             ),
           ),
@@ -60,7 +66,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       width: 140,
                       height: 140,
                       decoration: BoxDecoration(
-                        color: AppPallete.profileBackground,
+                        color: AppPalette.profileBackground,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -82,7 +88,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 radius: 70,
                                 child: Icon(
                                   Icons.person,
-                                  color: AppPallete.backgroundColor,
+                                  color: AppPalette.backgroundColor,
                                 ),
                               ),
                       ),
@@ -96,13 +102,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                const SizedBox(height: 250),
+                const SizedBox(height: 200),
+                // I'm using the market points provider to display the point here,
+                // because I'm to lazy to create a new one aakwokaowkaoaowk.
+                // Is this a good practice? NO, it isn't.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 6,
+                  children: [
+                    Image.asset("assets/icons/points-logo.png",
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain
+                    ),
+                    user.when(
+                      data: (profile) => Text(
+                        '${profile.points}',
+                        style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppPalette.backgroundColor,
+                      ),
+                      ),
+                      loading: () =>
+                      const CircularProgressIndicator(),
+                      error: (e, _) =>
+                      const Text('Error'),
+                    )
+                  ],
+                ),
                 Text(
                   profile.username,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: AppPallete.backgroundColor,
+                    color: AppPalette.backgroundColor,
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -111,7 +145,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w100,
-                    color: AppPallete.backgroundColor,
+                    color: AppPalette.backgroundColor,
                   ),
                 ),
                 const SizedBox(height: 30),

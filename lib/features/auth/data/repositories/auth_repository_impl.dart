@@ -1,3 +1,5 @@
+import 'package:pomogrow/features/auth/data/models/user_models.dart';
+import 'package:pomogrow/features/auth/domain/entities/local_auth_state.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -75,7 +77,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Stream<AuthState> getAuthStateChange() {
-    return remoteDatasource.getAuthStateChange();
+  Stream<LocalAuthState> getAuthStateChange() {
+    return remoteDatasource.getAuthStateChange().map((data) {
+      final user = data.session?.user;
+
+      return LocalAuthState(
+          user: user != null ? UserModels.fromSupabase(user) : null);
+    });
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/features/profile/presentation/widgets/profile_dialog_button.dart';
 
 Future<String?> showCustomUsernameDialog(BuildContext context) {
@@ -11,10 +11,10 @@ Future<String?> showCustomUsernameDialog(BuildContext context) {
     barrierDismissible: true,
     barrierLabel: "",
     transitionDuration: const Duration(milliseconds: 300),
-    pageBuilder: (_, __, ___) {
+    pageBuilder: (_, _, _) {
       return const SizedBox.shrink();
     },
-    transitionBuilder: (_, animation, __, ___) {
+    transitionBuilder: (_, animation, _, _) {
       return Transform.translate(
         offset: Offset(0, -100 + (100 * animation.value)),
         child: Opacity(
@@ -55,7 +55,7 @@ Future<String?> showCustomUsernameDialog(BuildContext context) {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: AppPallete.blackShadow,
+                              color: AppPalette.blackShadow,
                             ),
                           ),
 
@@ -63,14 +63,14 @@ Future<String?> showCustomUsernameDialog(BuildContext context) {
 
                           TextField(
                             controller: nameController,
-                            style: TextStyle(color: AppPallete.blackShadow),
+                            style: TextStyle(color: AppPalette.blackShadow),
                             decoration: InputDecoration(
                               hintText: "Masukkan username baru",
                               hintStyle: TextStyle(
-                                color: AppPallete.blackShadow,
+                                color: AppPalette.blackShadow,
                               ),
                               filled: true,
-                              fillColor: AppPallete.textfieldColor,
+                              fillColor: AppPalette.textfieldColor,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),

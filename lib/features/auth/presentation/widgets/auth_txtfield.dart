@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class AuthField extends StatefulWidget {
   final Widget icon;
@@ -37,7 +37,7 @@ class _AuthFieldState extends State<AuthField> {
         prefixIcon: widget.icon,
         hintText: widget.hintText,
         hintStyle: Theme.of(context).textTheme.bodyMedium,
-        errorStyle: const TextStyle(height: 0, color: AppPallete.error),
+        errorStyle: const TextStyle(height: 0, color: AppPalette.error),
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(

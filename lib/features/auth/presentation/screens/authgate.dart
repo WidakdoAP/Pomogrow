@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomogrow/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pomogrow/features/auth/presentation/screens/signin_screen.dart';
-import 'package:pomogrow/features/home/presentation/screens/home_screen.dart';
+import 'package:pomogrow/features/home/presentation/screens/entry_screen.dart';
 
 class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
@@ -14,7 +14,7 @@ class AuthGate extends ConsumerWidget {
     return authState.when(
       data: (user) {
         if (user != null) {
-          return const HomeScreen();
+          return const EntryScreen();
         } else {
           return const SigninScreen();
         }

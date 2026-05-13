@@ -1,4 +1,5 @@
 import 'package:pomogrow/core/error/failures.dart';
+import 'package:pomogrow/features/auth/domain/entities/local_auth_state.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -21,5 +22,5 @@ abstract interface class AuthRepository {
     required String password,
   });
 
-  Stream<AuthState> getAuthStateChange();
+  Stream<LocalAuthState> getAuthStateChange();
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/features/home/presentation/providers/user_provider.dart';
 
 class InfoCard extends ConsumerStatefulWidget {
@@ -31,7 +31,7 @@ class _InfoCardState extends ConsumerState<InfoCard> {
     final profile = profileAsync.value!;
     String limitText(String text, int maxLength) {
       if (text.length <= maxLength) return text;
-      return text.substring(0, maxLength) + "...";
+      return "${text.substring(0, maxLength)}...";
     }
 
     return ListTile(
@@ -40,7 +40,7 @@ class _InfoCardState extends ConsumerState<InfoCard> {
             ? NetworkImage(profile.avatarUrl)
             : null,
         child: profile.avatarUrl.isEmpty
-            ? Icon(Icons.person, color: AppPallete.backgroundColor)
+            ? Icon(Icons.person, color: AppPalette.backgroundColor)
             : null,
       ),
       title: Text(

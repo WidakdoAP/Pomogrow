@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/features/home/domain/entities/bottom_item.dart';
 import 'package:pomogrow/features/home/presentation/providers/menu_provider.dart';
 import 'package:pomogrow/features/home/presentation/widgets/bottombar_icon.dart';
@@ -14,9 +14,9 @@ class BottomBar extends ConsumerWidget {
     final activeIndex = ref.watch(bottomBarIndexProvider);
 
     final items = [
-      BottomItem(icon: Icons.timer, title: "Fokus", route: "/"),
+      BottomItem(icon: Icons.timer, title: "Fokus", route: "/timer"),
       BottomItem(icon: Icons.nature, title: "Ladang", route: "/fields"),
-      BottomItem(icon: Icons.chat_bubble, title: "Chatbot", route: "/"),
+      BottomItem(icon: Icons.chat_bubble, title: "Chatbot", route: "/home"),
       BottomItem(icon: Icons.person, title: "Profile", route: "/profile"),
     ];
 
@@ -25,10 +25,10 @@ class BottomBar extends ConsumerWidget {
       child: Container(
         height: 70,
         decoration: BoxDecoration(
-          color: AppPallete.backgroundColor,
+          color: AppPalette.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: AppPallete.blackShadow,
+              color: AppPalette.blackShadow,
               blurRadius: 10,
               spreadRadius: 1,
               offset: Offset(0, 2),

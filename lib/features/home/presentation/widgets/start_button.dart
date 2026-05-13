@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class StartButton extends StatelessWidget {
   final bool isRunning;
@@ -18,14 +18,14 @@ class StartButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppPallete.textTitleColor, width: 4),
-            color: AppPallete.backgroundColor,
+            border: Border.all(color: AppPalette.textTitleColor, width: 4),
+            color: AppPalette.backgroundColor,
           ),
 
           child: Icon(
             isRunning ? Icons.pause : Icons.play_arrow_rounded,
             size: 50,
-            color: AppPallete.textTitleColor,
+            color: AppPalette.textTitleColor,
           ),
         ),
       ),

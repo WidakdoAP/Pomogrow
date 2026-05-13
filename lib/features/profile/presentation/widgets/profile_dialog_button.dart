@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class ProfileDialogButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -16,9 +16,9 @@ class ProfileDialogButton extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            AppPallete.gradient1,
-            AppPallete.gradient2,
-            AppPallete.gradient3,
+            AppPalette.gradient1,
+            AppPalette.gradient2,
+            AppPalette.gradient3,
           ],
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
@@ -29,7 +29,7 @@ class ProfileDialogButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           fixedSize: const Size(395, 55),
-          backgroundColor: AppPallete.transparentColor,
+          backgroundColor: AppPalette.transparentColor,
           shadowColor: Colors.transparent,
         ),
         child: Text(text, style: Theme.of(context).textTheme.bodyLarge),

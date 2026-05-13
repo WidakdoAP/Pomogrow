@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/features/onboarding/data/onboarding_local_data.dart';
 import 'dart:async';
 
@@ -27,8 +27,8 @@ class _SplashScreenState extends State<SplashScreen> {
     // final showOnboarding = !(await repo.isOnboardingCompleted());
     final showOnboarding = alwaysShowOnboarding
         ? true
-        : !(await repo.isOnboardingCompleted()); // Hanya untuk debug.
-
+        : !(await repo.isOnboardingCompleted()); // For debugging.
+    // TODO: Don't forget to change this code when releasing to the play store.
     if (!mounted) return;
     if (showOnboarding) {
       Navigator.pushReplacementNamed(context, '/onboarding');
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
-            colors: [AppPallete.gradient1, AppPallete.backgroundColor],
+            colors: [AppPalette.gradient1, AppPalette.backgroundColor],
             center: Alignment.center,
             radius: 3.14,
           ),

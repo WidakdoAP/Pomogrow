@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
+import 'package:pomogrow/features/home/presentation/providers/auth_provider.dart';
 import 'package:pomogrow/features/home/presentation/providers/menu_provider.dart';
 import 'package:pomogrow/features/home/presentation/widgets/info_card.dart';
 
@@ -25,12 +26,12 @@ class _SidebarState extends ConsumerState<Sidebar> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppPallete.gradient1,
-            AppPallete.gradient2,
-            AppPallete.gradient3,
-            AppPallete.halfGradient3,
-            AppPallete.halfGradient2,
-            AppPallete.halfGradient1,
+            AppPalette.gradient1,
+            AppPalette.gradient2,
+            AppPalette.gradient3,
+            AppPalette.halfGradient3,
+            AppPalette.halfGradient2,
+            AppPalette.halfGradient1,
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -56,6 +57,23 @@ class _SidebarState extends ConsumerState<Sidebar> {
                         ref
                             .read(activeMenuIndexProvider.notifier)
                             .setIndex(index);
+                        switch (item.title) {
+                          case "Marketplace":
+                            Navigator.pushReplacementNamed(
+                              context,
+                              '/marketplace',
+                            );
+                            break;
+
+                          case "Logout":
+                            ref.read(authNotifierProvider.notifier).logout();
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/signin',
+                              (route) => false,
+                            );
+                            break;
+                        }
                       },
                       child: AnimatedSwitcher(
                         duration: animDuration,
@@ -79,8 +97,8 @@ class _SidebarState extends ConsumerState<Sidebar> {
 
                           decoration: BoxDecoration(
                             color: isActive
-                                ? AppPallete.blackShadow
-                                : AppPallete.transparentColor,
+                                ? AppPalette.blackShadow
+                                : AppPalette.transparentColor,
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Row(
@@ -91,8 +109,8 @@ class _SidebarState extends ConsumerState<Sidebar> {
                                 child: Icon(
                                   item.icon,
                                   color: isActive
-                                      ? AppPallete.backgroundColor
-                                      : AppPallete.textTitleColor,
+                                      ? AppPalette.backgroundColor
+                                      : AppPalette.textTitleColor,
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -101,8 +119,8 @@ class _SidebarState extends ConsumerState<Sidebar> {
                                 style: Theme.of(context).textTheme.bodyLarge
                                     ?.copyWith(
                                       color: isActive
-                                          ? AppPallete.backgroundColor
-                                          : AppPallete.textTitleColor,
+                                          ? AppPalette.backgroundColor
+                                          : AppPalette.textTitleColor,
                                     ),
                               ),
                             ],

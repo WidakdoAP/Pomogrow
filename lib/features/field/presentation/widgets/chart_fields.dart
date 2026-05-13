@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:pomogrow/core/theme/app_pallete.dart';
+import 'package:pomogrow/core/theme/palette.dart';
 
 class BarChartFields extends StatelessWidget {
   const BarChartFields({super.key});
@@ -14,7 +14,7 @@ class BarChartFields extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: AppPallete.backgroundColor,
+        color: AppPalette.backgroundColor,
       ),
       padding: const EdgeInsets.all(16),
       child: SizedBox(
@@ -28,7 +28,7 @@ class BarChartFields extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: AppPallete.textBlack,
+                    color: AppPalette.textBlack,
                   ),
                 ),
                 const Spacer(),
@@ -48,7 +48,7 @@ class BarChartFields extends StatelessWidget {
                     horizontalInterval: 5,
                     getDrawingHorizontalLine: (value) {
                       return FlLine(
-                        color: AppPallete.grey,
+                        color: AppPalette.grey,
                         strokeWidth: 1,
                         dashArray: null,
                       );
@@ -97,8 +97,8 @@ class BarChartFields extends StatelessWidget {
                           toY: values[index].toDouble(),
                           width: 40,
                           color: isMax
-                              ? AppPallete.barColor
-                              : AppPallete.barColorTransparent,
+                              ? AppPalette.barColor
+                              : AppPalette.barColorTransparent,
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ],
