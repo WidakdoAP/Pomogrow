@@ -19,21 +19,27 @@ class ItemProductDatasource {
     // Mapping time :), from product_id -> status.
     final ownedProductsMap = {
       for (final item in owned)
-        item['product_id']: item['status']
+        item['product_id']: {
+        'status': item['status'],
+        'favorite': item['favorite'],
+      }
     };
 
     // Combine it.
-    final items =  (products as List)
-        .map((products) {
-          final status = ownedProductsMap[products['id']] ?? 'needed';
+    final items =  (products as List).map((products) {
+      final ownedData = ownedProductsMap[products['id']];
 
-          return ItemProductModel.fromMap(
-              products,
-              this,
-              status: status
-          );
-        })
-        .toList();
+      final status = ownedData?['status'] ?? 'needed';
+
+      final favorite = ownedData?['favorite'] ?? false;
+
+      return ItemProductModel.fromMap(
+          products,
+          this,
+          status: status,
+          favorite: favorite,
+      );
+    }).toList();
 
     // Sort it so that the favorite came out on top.
     items.sort((a, b) {
@@ -43,11 +49,18 @@ class ItemProductDatasource {
     return items;
   }
 
-  Future<void> updateFavorite(String id, bool newValue) async {
+  Future<void> updateFavorite(
+      String userId,
+      String productId,
+      bool newValue
+      ) async {
+
     await client
-        .from('item_products')
-        .update({'favorite': newValue})
-        .eq('id', id);
+        .from('user_products')
+        .update({'favorite': newValue,
+    })
+        .eq('user_id', userId)
+        .eq('product_id', productId);
   }
 
   String getPlantImageUrl(String fileName) {

@@ -14,7 +14,7 @@ class ItemProductModel extends ItemProduct {
   factory ItemProductModel.fromMap(
     Map<String, dynamic> map,
     ItemProductDatasource datasource, {
-      String status = 'needed',
+      String status = 'needed', bool favorite = false,
   }
   ) {
     final imagePath = map['image_path'] ?? '';
@@ -26,7 +26,7 @@ class ItemProductModel extends ItemProduct {
       name: map['name'] ?? '',
       imageUrl: imageUrl, //map['image_url'] ?? '',
       status: status,
-      favorite: map['favorite'] ?? false,
+      favorite: favorite,
       price: int.parse(map['price'].toString()),
     );
   }

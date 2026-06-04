@@ -218,26 +218,26 @@ class _SignInScreenState extends ConsumerState<SigninScreen> {
                       },
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        //const Spacer(), Sama aja
-                        RichText(
-                          text: TextSpan(
-                            text: 'Lupa Password?',
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(
-                                  color: AppPalette.textTitleColor,
-                                  decoration: TextDecoration.underline,
-                                ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(context, '/email_verf');
-                              },
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     //const Spacer(), Sama aja
+                    //     RichText(
+                    //       text: TextSpan(
+                    //         text: 'Lupa Password?',
+                    //         style: Theme.of(context).textTheme.bodyLarge
+                    //             ?.copyWith(
+                    //               color: AppPalette.textTitleColor,
+                    //               decoration: TextDecoration.underline,
+                    //             ),
+                    //         recognizer: TapGestureRecognizer()
+                    //           ..onTap = () {
+                    //             Navigator.pushNamed(context, '/email_verf');
+                    //           },
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     const SizedBox(height: 150),
                     AuthButton(
                       text: 'Sign In',

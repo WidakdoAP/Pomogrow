@@ -4,6 +4,7 @@ import 'package:pomogrow/features/field/data/repository/field_repository_impl.da
 import 'package:pomogrow/features/field/domain/entities/field_tile.dart';
 import 'package:pomogrow/features/field/domain/usecases/get_field_tiles.dart';
 import 'package:pomogrow/features/field/domain/usecases/get_image_url.dart';
+import 'package:pomogrow/features/field/domain/usecases/get_owned_products_count.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabaseProvider = Provider((_) => Supabase.instance.client);
@@ -24,6 +25,12 @@ final getImageUrlProvider = Provider((ref) {
   return GetImageUrl(ref.watch(fieldRepositoryProvider));
 });
 
+final getOwnedProductsCountProvider = Provider((ref) {
+  return GetOwnedProductsCount(
+    ref.watch(fieldRepositoryProvider),
+  );
+});
+
 final fieldTilesProvider = FutureProvider<List<FieldTile>>((ref) async {
   final usecase = ref.watch(getTilesProvider);
   return await usecase();
@@ -31,7 +38,15 @@ final fieldTilesProvider = FutureProvider<List<FieldTile>>((ref) async {
 
 final plantedCountProvider = FutureProvider<int>((ref) async {
   final tiles = await ref.watch(fieldTilesProvider.future);
-  final count = tiles.where((tile) => tile.value == true).length;
+  return tiles.where((tile) => tile.isPlanted).length;
+});
 
-  return count;
+final ownedProductsCountProvider = FutureProvider<int>((ref) async {
+  final usecase = ref.watch(getOwnedProductsCountProvider);
+
+  return await usecase();
+});
+
+final focusStatsProvider = FutureProvider<Map<String, int>>((ref) async {
+  return await ref.watch(fieldRepositoryProvider).getFocusStats();
 });

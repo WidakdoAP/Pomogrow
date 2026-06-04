@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomogrow/core/theme/palette.dart';
+import 'package:pomogrow/core/widgets/back_arrow.dart';
 import 'package:pomogrow/core/widgets/global_bottombar.dart';
 import 'package:pomogrow/features/field/presentation/providers/field_provider.dart';
 import 'package:pomogrow/features/field/presentation/widgets/chart_fields.dart';
@@ -25,14 +26,14 @@ class _FieldScreenState extends State<FieldsScreen> {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       SizedBox(
                         child: Transform.scale(
                           scale: 0.65,
                           child: Transform.translate(
-                            offset: const Offset(0, -70),
+                            offset: const Offset(-20, -70),
                             child: DiagonalGrid(),
                           ),
                         ),
@@ -51,46 +52,141 @@ class _FieldScreenState extends State<FieldsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final countAsync = ref.watch(plantedCountProvider);
 
-                    return countAsync.when(
+                    final ownedCountAsync =
+                    ref.watch(ownedProductsCountProvider);
+
+                    final plantedCountAsync =
+                    ref.watch(plantedCountProvider);
+
+                    return ownedCountAsync.when(
                       loading: () => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
-                          MenuSquare(
-                            bigTitle: 'Total',
-                            title: '...',
-                            desc: 'Hasil fokus mu',
+                          Expanded(
+                            child: MenuSquare(
+                              bigTitle: 'Total',
+                              title: '...',
+                              desc: 'Hasil fokus mu',
+                            ),
                           ),
-                          MenuSquare(
-                            bigTitle: 'Jumlah',
-                            title: '1',
-                            desc: 'Skin pohon mu',
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: MenuSquare(
+                              bigTitle: 'Jumlah',
+                              title: '...',
+                              desc: 'Skin pohon',
+                            ),
                           ),
                         ],
                       ),
 
-                      data: (count) => Row(
+                      error: (_, _) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          MenuSquare(
-                            bigTitle: 'Total',
-                            title: '$count / 25',
-                            desc: 'Hasil fokus mu',
+                        children: const [
+                          Expanded(
+                            child: MenuSquare(
+                              bigTitle: 'Total',
+                              title: '0 / 25',
+                              desc: 'Hasil fokus mu',
+                            ),
                           ),
-                          const MenuSquare(
-                            bigTitle: 'Jumlah',
-                            title: '1',
-                            desc: 'Skin pohon mu',
-                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: MenuSquare(
+                              bigTitle: 'Jumlah',
+                              title: '0',
+                              desc: 'Skin pohon',
+                            ),
+                          )
                         ],
                       ),
 
-                      error: (e, _) => Text("Error: $e"),
+                      data: (ownedCount) {
+                        return plantedCountAsync.when(
+
+                          loading: () => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Expanded(
+                                child: MenuSquare(
+                                  bigTitle: 'Total',
+                                  title: '...',
+                                  desc: 'Hasil fokus',
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Expanded(
+                                child: MenuSquare(
+                                  bigTitle: 'Jumlah',
+                                  title: '...',
+                                  desc: 'Skin pohon',
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          error: (_, _) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: MenuSquare(
+                                  bigTitle: 'Total',
+                                  title: '0 / 25',
+                                  desc: 'Hasil fokus',
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: MenuSquare(
+                                  bigTitle: 'Jumlah',
+                                  title: '$ownedCount',
+                                  desc: 'Skin pohon',
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          data: (plantedCount) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: MenuSquare(
+                                  bigTitle: 'Total',
+                                  title: '$plantedCount / 25',
+                                  desc: 'Hasil fokus',
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: MenuSquare(
+                                  bigTitle: 'Jumlah',
+                                  title: '$ownedCount',
+                                  desc: 'Skin pohon',
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
               ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SafeArea(
+                  top: true,
+                  left: true,
+                  child: BackButtonWidgets(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

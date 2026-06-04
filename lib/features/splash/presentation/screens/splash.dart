@@ -13,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final bool alwaysShowOnboarding = true; // debug mode
+  //final bool alwaysShowOnboarding = true; // debug mode
   final repo = OnboardingLocalData();
 
   @override
@@ -24,16 +24,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigate() async {
     await Future.delayed(const Duration(seconds: 2));
-    // final showOnboarding = !(await repo.isOnboardingCompleted());
-    final showOnboarding = alwaysShowOnboarding
-        ? true
-        : !(await repo.isOnboardingCompleted()); // For debugging.
+    final showOnboarding = !(await repo.isOnboardingCompleted());
+    // final showOnboarding = alwaysShowOnboarding
+    //     ? true
+    //     : !(await repo.isOnboardingCompleted()); // For debugging.
     // TODO: Don't forget to change this code when releasing to the play store.
     if (!mounted) return;
     if (showOnboarding) {
       Navigator.pushReplacementNamed(context, '/onboarding');
     } else {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/auth_gate');
     }
   }
 

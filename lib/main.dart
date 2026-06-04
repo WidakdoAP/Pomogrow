@@ -5,10 +5,13 @@ import 'package:pomogrow/core/.secrets/supabase_key.dart';
 import 'package:pomogrow/features/auth/presentation/screens/authgate.dart';
 import 'package:pomogrow/features/auth/presentation/screens/email_auth_screen.dart';
 import 'package:pomogrow/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:pomogrow/features/chatbot/presentation/screens/chat_screen.dart';
 import 'package:pomogrow/features/field/presentation/screens/fields_screen.dart';
 import 'package:pomogrow/features/home/presentation/screens/entry_screen.dart';
 import 'package:pomogrow/features/market/presentation/screens/market_screen.dart';
+import 'package:pomogrow/features/notes/presentation/screens/notes_page_screen.dart';
 import 'package:pomogrow/features/profile/presentation/screens/profile_screen.dart';
+import 'package:pomogrow/features/splash/presentation/screens/splash.dart';
 import 'package:pomogrow/features/timer/presentation/screens/timer_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +20,13 @@ import 'package:pomogrow/core/theme/theme.dart';
 import 'package:pomogrow/features/auth/presentation/screens/signin_screen.dart';
 import 'package:pomogrow/features/auth/presentation/screens/signup_screen.dart';
 
+import 'features/auth/presentation/providers/auth_provider.dart';
+
 // This is to access Supabase Database.
 const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const supabaseKey = String.fromEnvironment('SUPABASE_KEY');
+final navKey = GlobalKey<NavigatorState>();
+late final StreamSubscription _authSub;
 
 // Main Function
 Future<void> main() async {
@@ -36,29 +43,33 @@ Future<void> main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final navKey = GlobalKey<NavigatorState>();
-
+class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    // If user forgot password, they'll be redirected to this.
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final event = data.event;
 
-      if (event == AuthChangeEvent.passwordRecovery) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          navKey.currentState?.pushReplacementNamed('/pass_reset');
-        });
+    _authSub = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      if (data.event == AuthChangeEvent.passwordRecovery) {
+        ref.read(isRecoveringPasswordProvider.notifier).state = true;
+      }
+
+      if (data.event == AuthChangeEvent.signedOut) {
+        ref.read(isRecoveringPasswordProvider.notifier).state = false;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _authSub.cancel();
+    super.dispose();
   }
 
   @override
@@ -79,9 +90,16 @@ class _MyAppState extends State<MyApp> {
         '/fields': (context) => const FieldsScreen(),
         '/marketplace': (context) => const MarketScreen(),
         '/timer': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as int? ?? 0;
-          return TimerScreen(timeIntMinutes: args);
-        }
+          final args = ModalRoute.of(context)?.settings.arguments
+          as Map<String, dynamic>?;
+
+          return TimerScreen(
+            timeIntMinutes: args?['minutes'] ?? 0,
+            selectedIndex: args?['index'] ?? 0,
+          );
+        },
+        '/notes': (context) => const NotesPageScreen(),
+        '/chatbot': (context) => const ChatScreen(),
       },
       title: 'Pomogrow',
       // Global Theme.
@@ -90,7 +108,7 @@ class _MyAppState extends State<MyApp> {
         pageTransitionsTheme: AppTheme.navigatorTheme.pageTransitionsTheme,
       ),
       // The first activity, changed it to AuthGate activity.
-      home: AuthGate(),
+      home: SplashScreen(),
     );
   }
 }

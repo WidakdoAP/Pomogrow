@@ -35,6 +35,8 @@ class DiagonalGrid extends ConsumerWidget {
                 ),
                 itemCount: 25,
                 itemBuilder: (context, index) {
+                  // final reversedIndex = 24 - index;
+                  // final tile = tilesMap[reversedIndex];
                   final tile = tilesMap[index];
                   final plantUrl = tile == null
                       ? ""
@@ -86,39 +88,3 @@ class DiagonalGrid extends ConsumerWidget {
     );
   }
 }
-
-// return Container(
-//                   alignment: Alignment.center,
-//                   decoration: BoxDecoration(
-//                     color: Colors.green[500],
-//                     border: Border.all(color: Colors.white, width: 1),
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                 );
-
-                // return Transform(
-                //   transform: Matrix4.identity()
-                //     ..rotateZ(-math.pi / 4) // undo rotateZ for each tile
-                //     ..rotateX(-0.9), // undo rotateX for each tile
-                //   alignment: Alignment.center,
-                //   child: Image.asset("assets/images/soil.png", fit: BoxFit.cover),
-                // );
-
-
-                // return Transform(
-                //   transform: Matrix4.identity()
-                //     ..rotateZ(-math.pi / 4) // undo rotateZ for each tile
-                //     ..rotateX(-0.9), // undo rotateX for each tile
-                //   alignment: Alignment.center,
-                //   child: ClipRRect(
-                //     borderRadius: BorderRadius.circular(10),
-                //     child: Container(
-                //       decoration: BoxDecoration(
-                //         image: DecorationImage(
-                //           image: AssetImage("assets/images/soil.png"),
-                //           fit: BoxFit.cover,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // );

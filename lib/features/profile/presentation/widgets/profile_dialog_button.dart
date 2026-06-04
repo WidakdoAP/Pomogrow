@@ -4,10 +4,12 @@ import 'package:pomogrow/core/theme/palette.dart';
 class ProfileDialogButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
+  final Size size;
   const ProfileDialogButton({
     super.key,
     required this.onPressed,
     required this.text,
+    required this.size
   });
 
   @override
@@ -28,7 +30,7 @@ class ProfileDialogButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          fixedSize: const Size(395, 55),
+          fixedSize: size,//Size(395, 55),
           backgroundColor: AppPalette.transparentColor,
           shadowColor: Colors.transparent,
         ),

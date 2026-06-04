@@ -14,17 +14,4 @@ class ItemProduct {
     required this.favorite,
     required this.price,
   });
-
-  // String get statusText {
-  //   switch (status) {
-  //     case 'needed':
-  //       return '$price Poin';
-  //     case 'owned_unused':
-  //       return 'Terbeli';
-  //     case 'in_use':
-  //       return 'Digunakan';
-  //     default:
-  //       return '';
-  //   }
-  // }
 }

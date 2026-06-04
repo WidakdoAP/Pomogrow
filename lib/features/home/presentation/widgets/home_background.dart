@@ -9,7 +9,6 @@ class HomeBackground extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final equippedPlant = ref.watch(equippedPlantImageProvider);
-    ref.invalidate(equippedPlantImageProvider);
     return Positioned.fill(
       child: Column(
         children: [
@@ -18,7 +17,7 @@ class HomeBackground extends ConsumerWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Positioned.fill(
+                SizedBox.expand(
                   child: Image.asset(
                     "assets/images/field.png",
                     fit: BoxFit.cover,

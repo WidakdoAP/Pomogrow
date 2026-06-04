@@ -14,6 +14,7 @@ abstract interface class AuthRemoteDatasource {
   Future<UserEntity?> updatePassword({required String password});
   Future<void> signInWithGoogle();
   Stream<AuthState> getAuthStateChange();
+  Future<String?> getExistingProvider(String email);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
@@ -38,8 +39,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
         throw const ServerException("User doesn't exist!");
       }
       return UserEntity(id: user.id, name: name, email: email);
+    } on AuthException catch (e) {
+      if (e.message.contains('User already registered')) {
+        throw const ServerException(
+          "Email sudah terdaftar. Silakan login.",
+        );
+      }
+
+      throw ServerException(e.message);
     } catch (e) {
-      throw ServerException("Terjadi Kesalahan: $e");
+      throw const ServerException(
+        "Terjadi kesalahan saat membuat akun",
+      );
     }
   }
 
@@ -76,7 +87,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   Future<void> resetPassword({required String email}) async {
     await client.auth.resetPasswordForEmail(
       email,
-      redirectTo: "pomogrow://login-callback/",
+      redirectTo: "pomogrow://reset-password/",
     );
   }
 
@@ -110,5 +121,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   @override
   Stream<AuthState> getAuthStateChange() {
     return client.auth.onAuthStateChange;
+  }
+
+  @override
+  Future<String?> getExistingProvider(String email) async {
+    final response = await client
+        .from('profiles')
+        .select('provider')
+        .eq('email', email)
+        .maybeSingle();
+
+    return response?['provider'];
   }
 }

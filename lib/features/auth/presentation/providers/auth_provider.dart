@@ -175,6 +175,17 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserEntity?>> {
         }
     );
   }
+
+  Future<String?> getExistingProvider(String email) async {
+    final result =
+    await ref.read(authRepositoryProvider)
+        .getExistingProvider(email);
+
+    return result.fold(
+          (l) => throw ServerException(l.message),
+          (r) => r,
+    );
+  }
 }
 
 class AuthActionNotifier extends StateNotifier<AsyncValue<String?>> {
@@ -197,6 +208,14 @@ final authActionStateProvider =
     StateNotifierProvider<AuthActionNotifier, AsyncValue<String?>>(
       (ref) => AuthActionNotifier(),
     );
+
+final authEventProvider = StreamProvider<AuthChangeEvent>((ref) {
+  return Supabase.instance.client.auth.onAuthStateChange.map(
+        (data) => data.event,
+  );
+});
+
+final isRecoveringPasswordProvider = StateProvider<bool>((ref) => false);
 
 final authNotifierProvider =
     StateNotifierProvider<AuthNotifier, AsyncValue<UserEntity?>>((ref) {

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomogrow/features/home/presentation/screens/owned_product_screen.dart';
 import 'package:pomogrow/features/home/presentation/widgets/home_background.dart';
 import 'package:pomogrow/features/home/presentation/widgets/home_bottombar.dart';
 import 'package:pomogrow/features/home/presentation/widgets/menu_square.dart';
 import 'package:pomogrow/features/home/presentation/widgets/start_button.dart';
 import 'package:pomogrow/features/home/presentation/widgets/timer_card.dart';
-import 'package:pomogrow/features/timer/presentation/screens/timer_screen.dart';
+import 'package:pomogrow/features/timer/presentation/providers/timer_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -62,17 +63,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        MenuSquare(
-                          title: 'Catatan',
-                          desc: 'Beri Nama Fokusmu',
-                          imagePath: "assets/images/list.png",
+                      children: [
+                        Expanded(
+                          child: MenuSquare(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, '/notes');
+                            },
+                            title: 'Catatan',
+                            desc: 'Buat catatan',
+                            imagePath: "assets/images/list.png",
+                          ),
                         ),
-                        MenuSquare(
-                          title: 'Pohon',
-                          desc: 'Ganti Pohon Fokusmu',
-                          imagePath: "assets/images/forest.png",
-                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: MenuSquare(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const OwnedProductScreen(),
+                                ),
+                              );
+                            },
+                            title: 'Pohon',
+                            desc: 'Ganti Pohonmu',
+                            imagePath: "assets/images/forest.png",
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -88,11 +105,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.only(bottom: 30),
               child: StartButton(
                 onPressed: () {
+                  final timerState = ref.read(timerNotifierProvider);
+
+                  // Kalau timer masih berjalan
+                  if (timerState.isRunning) {
+                    Navigator.pushNamed(context, '/timer');
+                    return;
+                  }
+
+                  final selectedIndex = sliderIndex.toInt();
                   final selectedTimer = minutes[sliderIndex.toInt()];
+
+                  ref.read(timerNotifierProvider.notifier).start(
+                    selectedTimer,
+                    selectedIndex,
+                  );
+
                   Navigator.pushNamed(
                     context,
                     '/timer',
-                    arguments: selectedTimer,
+                    arguments: {
+                      'minutes': selectedTimer,
+                      'index': selectedIndex,
+                    }
                   );
                 },
               ),
@@ -103,11 +138,3 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
-
-// Navigator.push(
-//   context,
-//   MaterialPageRoute(
-//     builder: (_) =>
-//         TimerScreen(timeIntMinutes: selectedTimer),
-//   ),
-// );

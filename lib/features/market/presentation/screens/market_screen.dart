@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomogrow/core/theme/palette.dart';
 import 'package:pomogrow/core/widgets/back_arrow.dart';
+import 'package:pomogrow/features/home/presentation/providers/home_provider.dart';
 import 'package:pomogrow/features/market/presentation/providers/banner_provider.dart';
 import 'package:pomogrow/features/market/presentation/providers/items_provider.dart';
 import 'package:pomogrow/features/market/presentation/providers/transaction_provider.dart';
@@ -49,17 +50,16 @@ class MarketScreen extends ConsumerWidget {
                           fit: BoxFit.contain
                         ),
                         user.when(
-                          data: (profile) => Text(
-                            '${profile.points} Poin',
-                            style:
-                            Theme.of(context)
+                          data: (profile) => Text('${profile.points}',
+                            style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge,
                           ),
-                          loading: () =>
-                          const SizedBox(),
-                          error: (e, _) =>
-                          const Text('Error'),
+                          loading: () => const SizedBox(),
+                          error: (e, _) => const Text(
+                              '0',
+                              style: TextStyle(color: AppPalette.backgroundColor)
+                          ),
                         )
                       ],
                     ),
@@ -70,7 +70,7 @@ class MarketScreen extends ConsumerWidget {
                 data: (b) => BannerSlider(banners: b),
                 loading: () => const SizedBox(
                   height: 160,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: CircularProgressIndicator(color: AppPalette.indicator)),
                 ),
                 error: (e, _) => Text(e.toString()),
               ),
@@ -94,6 +94,7 @@ class MarketScreen extends ConsumerWidget {
                         ref
                             .read(itemProductControllerProvider.notifier)
                             .toggle(item.id, item.favorite);
+                        ref.invalidate(homeControllerProvider);
                       },
                     );
                   },
@@ -101,7 +102,7 @@ class MarketScreen extends ConsumerWidget {
                 loading: () => const Padding(
                   padding: EdgeInsets.only(top: 40),
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: AppPalette.indicator),
                   ),
                 ),
                 error: (e, _) => Text(e.toString()),

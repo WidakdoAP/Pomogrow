@@ -38,11 +38,21 @@ class UserRepositoryImpl implements UserRepository {
     if (user == null) return;
 
     final uid = user.id;
-    final fileName = "$uid-${DateTime.now().millisecondsSinceEpoch}.png";
+    final fileName = "$uid.png";
 
-    await supabase.storage.from("avatars").upload(fileName, File(filePath));
+    await supabase.storage.from("avatars").upload(
+        fileName,
+        File(filePath),
+        fileOptions: const FileOptions(
+          upsert: true,
+        ),
+    );
 
-    final newUrl = supabase.storage.from("avatars").getPublicUrl(fileName);
+    // Cache busting, watever that means, idk.
+    final newUrl =
+        "${supabase.storage
+        .from("avatars")
+        .getPublicUrl(fileName)}?t=${DateTime.now().millisecondsSinceEpoch}";
 
     await supabase.auth.updateUser(
       UserAttributes(data: {"avatar_url": newUrl}),
@@ -57,5 +67,22 @@ class UserRepositoryImpl implements UserRepository {
     await supabase.auth.updateUser(
       UserAttributes(data: {"username": newName, "full_name": newName}),
     );
+  }
+
+  @override
+  Future<void> deleteUser() async {
+    final user = supabase.auth.currentUser;
+    final session = supabase.auth.currentSession;
+    if (user == null) return;
+
+    final response = await supabase.functions.invoke(
+      'delete-user',
+      headers: {'Authorization': 'Bearer ${session?.accessToken}'}
+    );
+
+    if (response.status != 200) {
+      throw Exception('Failed to delete user.');
+    }
+    await supabase.auth.signOut();
   }
 }

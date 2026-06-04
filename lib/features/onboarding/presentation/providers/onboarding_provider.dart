@@ -27,9 +27,9 @@ final onboardingPagesProvider = Provider<List<OnboardingEntity>>(
     ),
     OnboardingEntity(
       path: 'assets/animations/list.json',
-      title: 'AI JADWAL',
+      title: 'AI & JADWAL',
       desc:
-          'AI akan membantumu merancang jadwal dan menyimpan hasilnya ke fitur jadwal sebagai pengingat.',
+          'AI akan membantu menyelesaikan tugasmu dan kamu bisa membuat catatan tugas.',
     ),
   ],
 );

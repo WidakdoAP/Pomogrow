@@ -15,7 +15,6 @@ class MenuSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 170,
       height: 130,
       decoration: BoxDecoration(
         color: AppPalette.backgroundColor,
@@ -33,7 +32,7 @@ class MenuSquare extends StatelessWidget {
                 Text(
                   bigTitle,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: AppPalette.textBlack,
                   ),
@@ -43,10 +42,14 @@ class MenuSquare extends StatelessWidget {
                 ),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: AppPalette.titleMediumColor
+                  ),
                   textAlign: TextAlign.left,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  //overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 20),
                 Text(

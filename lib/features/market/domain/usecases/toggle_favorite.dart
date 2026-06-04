@@ -5,7 +5,8 @@ class ToggleFavorite {
 
   ToggleFavorite(this.repo);
 
-  Future<void> call(String id, bool newValue) {
-    return repo.toggleFavorite(id, newValue);
+  Future<void> call(String userId, String productId, bool newValue) {
+
+    return repo.toggleFavorite(userId, productId, newValue);
   }
 }

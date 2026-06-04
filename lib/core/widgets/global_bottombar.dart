@@ -15,9 +15,9 @@ class GlobalBottomBar extends ConsumerWidget {
 
     // Paths
     final items = [
-      BottomItem(icon: Icons.timer, title: "Fokus", route: "/home"),
+      BottomItem(icon: Icons.timer, title: "Fokus", route: "/timer"),
       BottomItem(icon: Icons.nature, title: "Ladang", route: "/fields"),
-      BottomItem(icon: Icons.chat_bubble, title: "Chatbot", route: "/home"),
+      BottomItem(icon: Icons.chat_bubble, title: "Chatbot", route: "/chatbot"),
       BottomItem(icon: Icons.person, title: "Profile", route: "/profile"),
     ];
 

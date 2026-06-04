@@ -4,7 +4,6 @@ class FieldTileModel extends FieldTile {
   const FieldTileModel({
     required super.tileIndex,
     required super.plantImage,
-    required super.value,
     required super.updatedAt,
   });
 
@@ -12,7 +11,6 @@ class FieldTileModel extends FieldTile {
     return FieldTileModel(
       tileIndex: json['tile_index'],
       plantImage: json['plant_image'],
-      value: json['value'],
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }

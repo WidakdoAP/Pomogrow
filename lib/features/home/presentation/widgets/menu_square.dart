@@ -5,8 +5,10 @@ class MenuSquare extends StatelessWidget {
   final String title;
   final String desc;
   final String imagePath;
+  final VoidCallback? onTap;
   const MenuSquare({
     super.key,
+    required this.onTap,
     required this.imagePath,
     required this.title,
     required this.desc,
@@ -15,9 +17,8 @@ class MenuSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
-        width: 170,
         height: 130,
         decoration: BoxDecoration(
           color: AppPalette.backgroundColor,
@@ -38,6 +39,8 @@ class MenuSquare extends StatelessWidget {
               left: 10,
               right: 80,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     title,

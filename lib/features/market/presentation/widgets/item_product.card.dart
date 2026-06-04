@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomogrow/core/theme/palette.dart';
+import 'package:pomogrow/core/widgets/flushbar_notif.dart';
 import 'package:pomogrow/features/market/presentation/screens/product_detail_screen.dart';
 import '../../domain/entities/item_product.dart';
 
@@ -76,7 +77,7 @@ class ItemProductCard extends StatelessWidget {
                             '${item.price} Poin',
                             style: const TextStyle(
                               color: AppPalette.blackShadow,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ],
@@ -89,7 +90,7 @@ class ItemProductCard extends StatelessWidget {
                         },
                         style: const TextStyle(
                           color: AppPalette.blackShadow,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -98,10 +99,24 @@ class ItemProductCard extends StatelessWidget {
 
                 IconButton(
                   icon: Icon(
-                    item.favorite ? Icons.favorite : Icons.favorite_border,
-                    color: AppPalette.grey,
+                    item.favorite
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+
+                    color: item.status == 'needed'
+                        ? AppPalette.blurWhite
+                        : AppPalette.grey,
                   ),
-                  onPressed: onFavoriteTap,
+
+                  onPressed: item.status == 'needed'
+                      ? () {
+                    FlushbarNotif.show(
+                      context,
+                      title: "Info",
+                      msg: "Beli item terlebih dahulu",
+                    );
+                  }
+                      : onFavoriteTap,
                 ),
               ],
             ),

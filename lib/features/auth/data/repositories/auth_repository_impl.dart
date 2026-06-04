@@ -1,6 +1,5 @@
 import 'package:pomogrow/features/auth/data/models/user_models.dart';
 import 'package:pomogrow/features/auth/domain/entities/local_auth_state.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fpdart/fpdart.dart';
 
 import 'package:pomogrow/core/error/exceptions.dart';
@@ -84,5 +83,18 @@ class AuthRepositoryImpl implements AuthRepository {
       return LocalAuthState(
           user: user != null ? UserModels.fromSupabase(user) : null);
     });
+  }
+
+  @override
+  Future<Either<Failures, String?>> getExistingProvider(
+      String email,
+      ) async {
+    try {
+      final provider = await remoteDatasource.getExistingProvider(email);
+
+      return Right(provider);
+    } on ServerException catch (e) {
+      return Left(Failures(e.message));
+    }
   }
 }

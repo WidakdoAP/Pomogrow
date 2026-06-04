@@ -10,4 +10,8 @@ class PointsRepositoryImpl implements PointsRepository {
   Future<void> addPoints(int minutes) {
     return datasource.addPoints(minutes);
   }
+  @override
+  Future<void> incrementFocusStat(int index) {
+    return datasource.incrementFocusStat(index);
+  }
 }

@@ -8,6 +8,7 @@ import 'package:pomogrow/features/auth/presentation/providers/auth_provider.dart
 import 'package:pomogrow/features/auth/presentation/widgets/auth_button.dart';
 import 'package:pomogrow/features/auth/presentation/widgets/auth_txtfield.dart';
 import 'package:pomogrow/features/auth/presentation/widgets/middlewave_clipper.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -21,14 +22,13 @@ class _ResetPasswordScreen extends ConsumerState<ResetPasswordScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  void resetPassword(BuildContext context) async {
+  Future<void> resetPassword(BuildContext context) async {
     final form = _formKey.currentState!;
 
     if (form.validate()) {
       await ref
           .read(authNotifierProvider.notifier)
           .updateNewPassword(password: _confirmPasswordController.text.trim());
-
       if (!context.mounted) return;
       FlushbarNotif.show(
         context,
@@ -117,8 +117,20 @@ class _ResetPasswordScreen extends ConsumerState<ResetPasswordScreen> {
                     const SizedBox(height: 20),
                     AuthButton(
                       text: 'Konfirmasi Email',
-                      onPressed: () {
-                        resetPassword(context);
+                      onPressed: () async {
+                        await resetPassword(context);
+
+                        ref.read(isRecoveringPasswordProvider.notifier).state = false;
+
+                        await Supabase.instance.client.auth.signOut();
+
+                        if (!context.mounted) return;
+
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/signin',
+                              (_) => false,
+                        );
                       },
                     ),
                   ],

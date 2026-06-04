@@ -7,6 +7,7 @@ class MenuRepositoryImpl implements MenuRepo {
   List<MenuItem> getMenuItems() {
     return [
       MenuItem(title: "Marketplace", icon: Icons.shopping_cart),
+      MenuItem(title: "Catatan", icon: Icons.note_add),
       MenuItem(title: "Logout", icon: Icons.logout),
     ];
   }

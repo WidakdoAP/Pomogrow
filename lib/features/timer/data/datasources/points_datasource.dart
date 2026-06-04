@@ -26,4 +26,31 @@ class PointsDatasource {
         .update({'points': newPoints})
         .eq('id', user.id);
   }
+
+  Future<void> incrementFocusStat(int index) async {
+    final user = supabase.auth.currentUser;
+
+    if (user == null) return;
+
+    final response = await supabase
+        .from('user_profiles')
+        .select('focus_stats')
+        .eq('id', user.id)
+        .single();
+
+    final stats = Map<String, dynamic>.from(response['focus_stats'] ?? {});
+
+    final key = index.toString();
+
+    final current = stats[key] ?? 0;
+
+    stats[key] = current + 1;
+
+    await supabase
+        .from('user_profiles')
+        .update({
+      'focus_stats': stats,
+    })
+        .eq('id', user.id);
+  }
 }

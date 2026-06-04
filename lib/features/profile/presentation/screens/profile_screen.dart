@@ -6,6 +6,7 @@ import 'package:pomogrow/core/widgets/back_arrow.dart';
 import 'package:pomogrow/core/widgets/global_bottombar.dart';
 import 'package:pomogrow/features/market/presentation/providers/transaction_provider.dart';
 import 'package:pomogrow/features/profile/presentation/providers/profile_provider.dart';
+import 'package:pomogrow/features/profile/presentation/widgets/delete_user_dialog.dart';
 import 'package:pomogrow/features/profile/presentation/widgets/profile_button.dart';
 import 'package:pomogrow/features/profile/presentation/widgets/profile_clip.dart';
 import 'package:pomogrow/features/profile/presentation/widgets/profile_dialog.dart';
@@ -19,13 +20,26 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.read(userProfileProvider.notifier).refreshProfile();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(userProfileProvider);
     final user = ref.watch(userPointsProvider);
     final profile = profileAsync.value;
 
     if (profile == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: AppPalette.indicator),
+        ),
+      );
     }
 
     return Scaffold(
@@ -119,15 +133,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       data: (profile) => Text(
                         '${profile.points}',
                         style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: AppPalette.backgroundColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: AppPalette.backgroundColor,
+                        ),
                       ),
+                      loading: () => const SizedBox(),
+                      error: (e, _) => const Text(
+                        '0',
+                        style: TextStyle(
+                            color: AppPalette.backgroundColor
+                        ),
                       ),
-                      loading: () =>
-                      const CircularProgressIndicator(),
-                      error: (e, _) =>
-                      const Text('Error'),
                     )
                   ],
                 ),
@@ -185,7 +202,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   text: "Kembali",
                   icon: Icons.door_back_door,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 160),
+                ProfileButton(
+                    onPressed: () {
+                      showCustomUserDeleteDialog(context, ref);
+                    },
+                    text: "Hapus Akun",
+                    icon: Icons.no_accounts
+                )
               ],
             ),
           ),

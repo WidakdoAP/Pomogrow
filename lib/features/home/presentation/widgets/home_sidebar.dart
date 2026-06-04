@@ -65,6 +65,13 @@ class _SidebarState extends ConsumerState<Sidebar> {
                             );
                             break;
 
+                          case "Catatan":
+                            Navigator.pushReplacementNamed(
+                              context,
+                              '/notes',
+                            );
+                            break;
+
                           case "Logout":
                             ref.read(authNotifierProvider.notifier).logout();
                             Navigator.pushNamedAndRemoveUntil(

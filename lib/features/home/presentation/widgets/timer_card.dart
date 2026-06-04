@@ -46,6 +46,7 @@ class TimerCard extends StatelessWidget {
             ),
             SliderTheme(
               data: SliderTheme.of(context).copyWith(
+                thumbColor: AppPalette.transparentColor,
                 thumbShape: thumbImage != null
                     ? CustomThumbImage(thumbImage!)
                     : const RoundSliderThumbShape(),

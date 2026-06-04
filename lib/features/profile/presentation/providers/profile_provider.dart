@@ -31,9 +31,13 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile> {
     await repository.updateUsername(name);
     await refreshProfile();
   }
+
+  Future<void> deleteUser() async {
+    await repository.deleteUser();
+  }
 }
 
 final userProfileProvider =
-    AsyncNotifierProvider<UserProfileNotifier, UserProfile>(
-      UserProfileNotifier.new,
-    );
+AsyncNotifierProvider<UserProfileNotifier, UserProfile>(
+  UserProfileNotifier.new,
+);

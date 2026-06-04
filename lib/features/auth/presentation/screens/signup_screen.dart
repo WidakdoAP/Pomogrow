@@ -47,37 +47,39 @@ class _SignUpScreenState extends ConsumerState<SignupScreen> {
     return controller;
   }
 
-  void signUp(BuildContext context) {
+  Future<void> signUp(BuildContext context) async {
     final form = _formKey.currentState!;
-    setState(() {
-      isShowLoading = true;
-      isShowConfetti = true;
-    });
-    Future.delayed(Duration(seconds: 2), () async {
-      if (form.validate()) {
-        await ref
-            .read(authNotifierProvider.notifier)
-            .signUp(
-              name: _nameController.text.trim(),
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-            );
-        check.fire();
-        Future.delayed(Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
-        });
-        confetti.fire();
-      } else {
-        error.fire();
-        Future.delayed(Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
+
+    if (!form.validate()) {
+      error.fire();
+      return;
+    }
+
+    setState(() {isShowLoading = true;});
+
+    try {
+      await ref.read(authNotifierProvider.notifier).signUp(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      check.fire();
+
+      setState(() {
+        isShowConfetti = true;
+      });
+
+      confetti.fire();
+    } catch (_) {
+      error.fire();
+    } finally {
+      if (mounted) {
+        setState(() {
+          isShowLoading = false;
         });
       }
-    });
+    }
   }
 
   @override
@@ -86,11 +88,15 @@ class _SignUpScreenState extends ConsumerState<SignupScreen> {
       next.whenOrNull(
         data: (user) {
           if (user != null && context.mounted) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, '/signin');
           }
         },
         error: (err, _) {
-          FlushbarNotif.show(context, title: "Error", msg: err.toString());
+          FlushbarNotif.show(
+            context,
+            title: "Error",
+            msg: err.toString().replaceFirst("Exception: ", ""),
+          );
         },
       );
     });
@@ -165,8 +171,38 @@ class _SignUpScreenState extends ConsumerState<SignupScreen> {
                     const SizedBox(height: 40),
                     AuthButton(
                       text: 'Sign Up',
-                      onPressed: () {
-                        signUp(context);
+                      onPressed: () async {
+                        final email = _emailController.text.trim();
+
+                        final provider = await ref
+                            .read(authNotifierProvider.notifier)
+                            .getExistingProvider(email);
+
+                        if (context.mounted) {
+                          if (provider == 'google') {
+                            FlushbarNotif.show(
+                              context,
+                              title: "Akun Sudah Ada",
+                              msg: "Gunakan login Google untuk akun ini.",
+                            );
+
+                            error.fire();
+                            return;
+                          }
+
+                          if (provider == 'email') {
+                            FlushbarNotif.show(
+                              context,
+                              title: "Akun Sudah Ada",
+                              msg: "Email sudah digunakan.",
+                            );
+
+                            error.fire();
+                            return;
+                          }
+
+                          signUp(context);
+                        }
                       },
                     ),
                     const SizedBox(width: 10, height: 10),
@@ -179,9 +215,7 @@ class _SignUpScreenState extends ConsumerState<SignupScreen> {
                         await ref
                             .read(authNotifierProvider.notifier)
                             .signUpWithGoogle();
-
-                        if (!context.mounted) return;
-                        Navigator.pushReplacementNamed(context, '/home');
+                        //Navigator.pushReplacementNamed(context, '/home');
                       },
                     ),
                     const SizedBox(height: 70),

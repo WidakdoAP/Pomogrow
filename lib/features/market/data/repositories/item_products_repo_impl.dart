@@ -13,8 +13,8 @@ class ItemProductsRepoImpl implements ItemProductRepo {
   }
 
   @override
-  Future<void> toggleFavorite(String id, bool newValue) {
-    return remote.updateFavorite(id, newValue);
+  Future<void> toggleFavorite(String userId, String productId, bool newValue) {
+    return remote.updateFavorite(userId, productId, newValue);
   }
 
   @override

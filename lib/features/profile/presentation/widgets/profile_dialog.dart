@@ -81,6 +81,7 @@ Future<String?> showCustomUsernameDialog(BuildContext context) {
 
                           ProfileDialogButton(
                             text: "Simpan",
+                            size: Size(395, 55),
                             onPressed: () {
                               Navigator.pop(context, nameController.text);
                             },

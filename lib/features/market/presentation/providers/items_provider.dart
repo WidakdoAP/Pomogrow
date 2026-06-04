@@ -55,7 +55,7 @@ class ItemProductNotifier extends StateNotifier<AsyncValue<List<ItemProduct>>> {
   }
 
   Future<void> toggle(String id, bool current) async {
-    await toggleFavorite(id, !current);
+    await toggleFavorite(userId, id, !current);
     await load();
   }
 }
